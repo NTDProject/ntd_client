@@ -44,12 +44,12 @@ const Sidebar = props => {
       icon: <DashboardIcon />
     },
     {
-      title: 'Users',
-      href: '/user',
+      title: 'Chiến dịch',
+      href: '/campaign',
       icon: <PeopleIcon />
     },{
-      title: 'Parter',
-      href: '/parter',
+      title: 'Ứng viên',
+      href: '/UngVien',
       icon: <PeopleIcon />
     },{
       title: 'Products',

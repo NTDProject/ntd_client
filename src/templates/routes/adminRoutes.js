@@ -1,44 +1,76 @@
 import Loadable from "react-loadable";
 import MyLoadingComponent from "../../components/LoadingComponent";
 
-  const HomePage = Loadable({
-    loader: () => import("../../pages/admin/HomePage"),
+  const Campaign = Loadable({
+    loader: () => import("../../pages/user/Campaign"),
     loading: MyLoadingComponent
   });
 
-  const ProductPage = Loadable({
-    loader: () => import("../../pages/admin/Product"),
-    loading: MyLoadingComponent
-  });
-  
-  const LoginPage = Loadable({
-    loader: () => import("../../pages/admin/Login"),
+  const CampaignCreateOrEdit = Loadable({
+    loader: () => import("../../pages/user/Campaign/CreateOrEdit"),
     loading: MyLoadingComponent
   });
 
+  const CampaignTranfer = Loadable({
+    loader: () => import("../../pages/user/Campaign/Tranfer"),
+    loading: MyLoadingComponent
+  });
+
+  const UngVienCreateOrEdit = Loadable({
+    loader: () => import("../../pages/user/UngVien/CreateOrEdit"),
+    loading: MyLoadingComponent
+  });
+
+  const UngVien = Loadable({
+    loader: () => import("../../pages/user/UngVien"),
+    loading: MyLoadingComponent
+  });
+
+  const AddUngVien = Loadable({
+    loader: () => import("../../pages/user/UngVien/Add"),
+    loading: MyLoadingComponent
+  });
 const routes = {
-    HomePage: {
-        path: '/admin',
+  Campaign: {
+          path: '/campaign',
+          exact: true,
+          component: Campaign,
+          private: true
+      },
+
+  CampaignCreateOrEdit: {
+          path: '/campaign/addOrEdit',
+          exact: true,
+          component: CampaignCreateOrEdit,
+          private: true
+      },
+  UngVien: {
+        path: '/UngVien',
         exact: true,
-        component: HomePage,
+        component: UngVien,
         private: true
     },
-    ProductPage: {
-      path: '/admin/product',
+    UngVienCreateOrEdit: {
+      path: '/UngVien/addOrEdit',
       exact: true,
-      component: ProductPage,
+      component: UngVienCreateOrEdit,
       private: true
   },
-    LoginPage: {
-        path: '/admin/login',
-        exact: true,
-        component: 
-            (localStorage.getItem("session") && ((new Date(JSON.parse(localStorage.getItem("session")).expires) - new Date()) >= 0) 
-                ? HomePage 
-                : LoginPage
-        ),
-        private: false
-    }
-};
+  AddUngVien: {
+    path: '/UngVien/add',
+    exact: true,
+    component: AddUngVien,
+    private: true
+},
+CampaignTranfer: {
+  path: '/Campaign/tranfer',
+  exact: true,
+  component: CampaignTranfer,
+  private: true
+},
+
+
+  };
+  
 
 export default routes;
