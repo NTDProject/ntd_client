@@ -5,11 +5,11 @@ import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { getData, tranfer } from './actions';
 import { Save } from '@material-ui/icons/';
-import { Button, Grid, Typography, Divider } from "@material-ui/core/";
+import { Button, Grid, Typography, Divider, MenuItem, Select, Input } from "@material-ui/core/";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import DatePicker from "react-datepicker";
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme,   } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { withRouter } from 'react-router-dom';
@@ -24,6 +24,7 @@ class Manager extends Component {
       ListViTri: [],
       tab: 0,
       UngVien:[],
+      ListGiaiDoan:[],
       ngayhen: new Date(),
       giaidoanhientai:"",
       giaidoansau:"",
@@ -32,6 +33,7 @@ class Manager extends Component {
       ten_chiendich:"",
       giaidoanhientai_id: "",
       diadiemhen_id:"",
+      giaidoansau_id:"",
     }
   }
   componentDidMount() {
@@ -43,13 +45,14 @@ class Manager extends Component {
   after = (resp) => {
     this.setState({
       ListViTri: this.props.route.location.state.ListVitri,
-      UngVien: resp,
+      UngVien: resp.chiendich,
       giaidoanhientai: this.props.route.location.state.giaidoanhientai,
       giaidoansau: this.props.route.location.state.giaidoansau,
       giaidoanhientai_id: this.props.route.location.state.giaidoanhientai_id,
       giaidoansau_id: this.props.route.location.state.giaidoansau_id,
       chiendich_id: this.props.route.location.state.chiendich_id,
-      ten_chiendich: this.props.route.location.state.ten_chiendich
+      ten_chiendich: this.props.route.location.state.ten_chiendich,
+      ListGiaiDoan: resp.giaidoan,
     })
 
     
@@ -63,6 +66,19 @@ class Manager extends Component {
       [name]: value
     });
   };
+
+  handleChangeInputText1 = e => {
+
+    let ListGiaiDoan = [...(this.state.ListGiaiDoan)]
+    console.log("start",e)
+    let value = e.target.value
+    let ten_chiendich = ListGiaiDoan.filter(c=> c.GiaiDoan == value)
+    this.setState({
+      giaidoansau_id : value,
+      ten_chiendich:   ten_chiendich[0].Ten_GiaiDoan
+    });
+  };
+
   handleChangeInputOnCell = (e,value) => {
     console.log(value)
     let UngVien = this.state.UngVien
@@ -79,6 +95,18 @@ class Manager extends Component {
     this.setState({
       UngVien : UngVien
     })
+  }
+
+  handleChangeInputOnCell1 = value => {
+    console.log(value)
+    let UngVien = this.state.UngVien
+    UngVien.map(u => {
+      if(u.ungvien_id == value._original.ungvien_id && u.vitri_id == value._original.vitri_id){
+          u.note = document.getElementById("note -" + u.vitri_id + "-" + u.ungvien_id).value 
+      }
+    })
+
+    console.log(UngVien)
   }
 
   save = () => {
@@ -102,7 +130,7 @@ class Manager extends Component {
         giaidoansau_id:giaidoansau_id,
         ngayhen:ngayhen,
         diadiemhen:diadiemhen,
-        UngVien:UngVien.filter(u => u.pass == 1)
+        UngVien:UngVien
       }
 
       this.props.tranfer(value, this.afterTranfer)
@@ -139,6 +167,12 @@ class Manager extends Component {
       )
     })
 
+    const ListGiaiDoan = this.state.ListGiaiDoan.map(c => {
+      return(
+      <MenuItem value={c.GiaiDoan} key = {c.GiaiDoan}>{c.Ten_GiaiDoan} </MenuItem>
+      )
+    })
+
     const TabPaneElement = this.state.ListViTri.map(v => {
       return (
         <TabPanel>
@@ -162,6 +196,14 @@ class Manager extends Component {
                 Cell: (props) =>
                   <div style={{ textAlign: "center" }}>
                     <input type = "checkbox" checked = {props.value > 0} name = {v.vitri_id + "-" + props.row._original.ungvien_id} id = {v.vitri_id + "-" + props.row._original.ungvien_id} onClick = {(e ) => this.handleChangeInputOnCell(e,props.row)}/>
+                  </div>,
+              },
+              {
+                Header: "Nhận xét",
+                accessor: "note",
+                Cell: (props) =>
+                  <div style={{ textAlign: "center" }}>
+                    <input type = "text" name = {"note -" + props.row.vitri_id + "-" + props.row._original.ungvien_id} id = {"note -" + v.vitri_id + "-" + props.row._original.ungvien_id}  onBlur = {() => this.handleChangeInputOnCell1(props.row)}  defaultValue = {props.value}/>
                   </div>,
               },
             ]}
@@ -194,7 +236,16 @@ class Manager extends Component {
               <span style={{ marginRight: "50px" }}>Gian đoạn sau:</span>
             </Grid>
             <Grid item xs={2}>
-              <input type="text" name="giaidoansau" value = {this.state.giaidoansau}/>
+            <Select
+              style = {{width: "150px"}}
+              value={this.state.giaidoansau_id}
+              input={<Input />}
+              onChange={this.handleChangeInputText1}
+            >
+              {
+                    ListGiaiDoan
+              }
+          </Select>{' '}
             </Grid>
             <Grid item xs={1}></Grid>
             <Grid item xs={1}></Grid>

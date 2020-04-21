@@ -114,11 +114,12 @@ class Manager extends Component {
     }
     else{
       const{ngayBatDau, ngayKetThuc, tenChienDich, ListViTri, idChienDich} = this.state
+      console.log(document.getElementById("ngay_batdau").value)
       let value = {
         chiendich_id: idChienDich,
         ten_chiendich: tenChienDich,
-        ngay_batdau: ngayBatDau,
-        ngay_ketthuc: ngayKetThuc,
+        ngay_batdau: document.getElementById("ngay_batdau").value,
+        ngay_ketthuc: document.getElementById("ngay_ketthuc").value,
         trangthai:"",
         mota:"",
         ListViTri: ListViTri
@@ -133,8 +134,8 @@ class Manager extends Component {
     let value = {
       chiendich_id: idChienDich,
       ten_chiendich: tenChienDich,
-      ngay_batdau: ngayBatDau,
-      ngay_ketthuc: ngayKetThuc,
+      ngay_batdau: document.getElementById("ngay_batdau").value,
+        ngay_ketthuc: document.getElementById("ngay_ketthuc").value,
       trangthai:"",
       mota:"",
       ListViTri: ListViTri
@@ -154,7 +155,8 @@ class Manager extends Component {
   }
 
   tranfer = () => {
-    this.props.history.push({pathname:'/campaign/tranfer',state:{ListVitri: this.state.ListViTri, chiendich_id: this.state.idChienDich, giaidoanhientai: this.state.giaidoanhientai, giaidoansau: this.state.giaidoansau, giaidoanhientai_id: this.state.giaidoanhientai_id, giaidoansau_id: this.state.giaidoansau_id, ten_chiendich: this.state.tenChienDich}});
+    const vitri = this.state.ListViTri.filter(v => v.soluong > 0);
+    this.props.history.push({pathname:'/campaign/tranfer',state:{ListVitri: vitri, chiendich_id: this.state.idChienDich, giaidoanhientai: this.state.giaidoanhientai, giaidoansau: this.state.giaidoansau, giaidoanhientai_id: this.state.giaidoanhientai_id, giaidoansau_id: this.state.giaidoansau_id, ten_chiendich: this.state.tenChienDich}});
   }
 
 
@@ -191,6 +193,7 @@ class Manager extends Component {
             </Grid>
             <Grid item xs={3}>
               <DatePicker
+              id = "ngay_batdau"
                 name="ngayBatDau"
                 selected={this.state.ngayBatDau}
                 onChange={this.handleChangeNgayBatDau}
@@ -204,6 +207,7 @@ class Manager extends Component {
             </Grid>
             <Grid item xs={4}>
               <DatePicker
+                id = "ngay_ketthuc"
                 name="ngayKetThuc"
                 selected={this.state.ngayKetThuc}
                 onChange={this.handleChangeNgayKetThuc}
