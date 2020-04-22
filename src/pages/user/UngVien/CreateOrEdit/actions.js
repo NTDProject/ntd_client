@@ -8,6 +8,13 @@ export const getData = (value,after) => {
     }
 }
 
+export const getHistory = (value,after) => {
+    return {
+        type : Types.GET_DATA_HISTORY,
+        payload: {value,after}
+    }
+}
+
 export const getDataSuccess = (data) => {
     return {
         type : Types.GET_DATA_UNGVIEN_DETAIL_SUCCESS,

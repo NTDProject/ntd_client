@@ -1,76 +1,87 @@
 import Loadable from "react-loadable";
 import MyLoadingComponent from "../../components/LoadingComponent";
 
-  const Campaign = Loadable({
-    loader: () => import("../../pages/user/Campaign"),
-    loading: MyLoadingComponent
-  });
+const Campaign = Loadable({
+  loader: () => import("../../pages/user/Campaign"),
+  loading: MyLoadingComponent
+});
 
-  const CampaignCreateOrEdit = Loadable({
-    loader: () => import("../../pages/user/Campaign/CreateOrEdit"),
-    loading: MyLoadingComponent
-  });
+const CampaignCreateOrEdit = Loadable({
+  loader: () => import("../../pages/user/Campaign/CreateOrEdit"),
+  loading: MyLoadingComponent
+});
 
-  const CampaignTranfer = Loadable({
-    loader: () => import("../../pages/user/Campaign/Tranfer"),
-    loading: MyLoadingComponent
-  });
+const CampaignTranfer = Loadable({
+  loader: () => import("../../pages/user/Campaign/Tranfer"),
+  loading: MyLoadingComponent
+});
 
-  const UngVienCreateOrEdit = Loadable({
-    loader: () => import("../../pages/user/UngVien/CreateOrEdit"),
-    loading: MyLoadingComponent
-  });
+const UngVienCreateOrEdit = Loadable({
+  loader: () => import("../../pages/user/UngVien/CreateOrEdit"),
+  loading: MyLoadingComponent
+});
 
-  const UngVien = Loadable({
-    loader: () => import("../../pages/user/UngVien"),
-    loading: MyLoadingComponent
-  });
+const UngVien = Loadable({
+  loader: () => import("../../pages/user/UngVien"),
+  loading: MyLoadingComponent
+});
 
-  const AddUngVien = Loadable({
-    loader: () => import("../../pages/user/UngVien/Add"),
-    loading: MyLoadingComponent
-  });
+const Analysis = Loadable({
+  loader: () => import("../../pages/admin/HomePage"),
+  loading: MyLoadingComponent
+});
+
+const AddUngVien = Loadable({
+  loader: () => import("../../pages/user/UngVien/Add"),
+  loading: MyLoadingComponent
+});
 const routes = {
+  Analysis: {
+    path: '/',
+    exact: true,
+    component: Analysis,
+    private: true
+  },
   Campaign: {
-          path: '/campaign',
-          exact: true,
-          component: Campaign,
-          private: true
-      },
+    path: '/campaign',
+    exact: true,
+    component: Campaign,
+    private: true
+  },
 
   CampaignCreateOrEdit: {
-          path: '/campaign/addOrEdit',
-          exact: true,
-          component: CampaignCreateOrEdit,
-          private: true
-      },
+    path: '/campaign/addOrEdit',
+    exact: true,
+    component: CampaignCreateOrEdit,
+    private: true
+  },
   UngVien: {
-        path: '/UngVien',
-        exact: true,
-        component: UngVien,
-        private: true
-    },
-    UngVienCreateOrEdit: {
-      path: '/UngVien/addOrEdit',
-      exact: true,
-      component: UngVienCreateOrEdit,
-      private: true
+    path: '/UngVien',
+    exact: true,
+    component: UngVien,
+    private: true
+  },
+  UngVienCreateOrEdit: {
+    path: '/UngVien/addOrEdit',
+    exact: true,
+    component: UngVienCreateOrEdit,
+    private: true
   },
   AddUngVien: {
     path: '/UngVien/add',
     exact: true,
     component: AddUngVien,
     private: true
-},
-CampaignTranfer: {
-  path: '/Campaign/tranfer',
-  exact: true,
-  component: CampaignTranfer,
-  private: true
-},
+  },
+  CampaignTranfer: {
+    path: '/Campaign/tranfer',
+    exact: true,
+    component: CampaignTranfer,
+    private: true
+  },
 
 
-  };
-  
+};
+
 
 export default routes;

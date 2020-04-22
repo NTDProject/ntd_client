@@ -13,8 +13,9 @@ import {
 } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import palette from '../../../../../theme/palette';
 
-import { data, options } from './chart';
+import {  options } from './chart';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -32,21 +33,29 @@ const LatestSales = props => {
 
   const classes = useStyles();
 
+  const data = {
+    labels: props.listVT,
+    datasets: [
+      {
+        label: 'Trúng tuyển',
+        backgroundColor: palette.primary.main,
+        data: props.listVTTT
+      },
+      {
+        label: 'Nhu cầu',
+        backgroundColor: palette.neutral,
+        data: props.listVTNC
+      }
+    ]
+  };
   return (
+
     <Card
       {...rest}
       className={clsx(classes.root, className)}
     >
       <CardHeader
-        action={
-          <Button
-            size="small"
-            variant="text"
-          >
-            Last 7 days <ArrowDropDownIcon />
-          </Button>
-        }
-        title="Latest Sales"
+        title="Tỷ lệ trúng tuyển / nhu cầu theo vị trí"
       />
       <Divider />
       <CardContent>
@@ -58,15 +67,7 @@ const LatestSales = props => {
         </div>
       </CardContent>
       <Divider />
-      <CardActions className={classes.actions}>
-        <Button
-          color="primary"
-          size="small"
-          variant="text"
-        >
-          Overview <ArrowRightIcon />
-        </Button>
-      </CardActions>
+      
     </Card>
   );
 };

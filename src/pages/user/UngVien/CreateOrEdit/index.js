@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
-import { getData, save } from './actions';
+import { getData, save, getHistory } from './actions';
 import { Save } from '@material-ui/icons/';
-import { Button, Grid, Typography, Divider } from "@material-ui/core/";
+import { Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText,DialogTitle } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
@@ -20,13 +20,14 @@ class Manager extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      listHistory:[],
       ten_chiendich: "",
       tenungvien:"",
       email:"",
       ListViTri: [],
       chiendich_id: "",
-      ungvien_id: ""
+      ungvien_id: "",
+      open: false
     }
   }
   componentDidMount() {
@@ -137,6 +138,24 @@ class Manager extends Component {
     toast(resp.message)
   }
 
+  HistoryDetail = (row) => {
+    this.props.getHistory({chienDichID : this.state.chiendich_id, ungVienID: this.state.ungvien_id, viTriID: row._original.vitri_id },this.afterHistory)
+
+  }
+
+  afterHistory = (resp) => {
+    this.setState({
+      open: true,
+      listHistory: resp
+    })
+  }
+
+  handleClose = () => {
+    this.setState({
+      open: false
+    })
+  }
+
   render() {
     
     return (
@@ -201,10 +220,13 @@ class Manager extends Component {
               accessor: "ten_vitri",
 
             },
-           
-
-           
-            
+            {
+              Header: "Lịch sử",
+              Cell: (props) => 
+              <div style = {{textAlign: "center"}}>
+                <button onClick = {() => this.HistoryDetail(props.row)}>xem chi tiết</button>
+              </div>,
+            },
           ]}
           defaultPageSize={10}
           className="-striped -highlight"
@@ -221,6 +243,51 @@ class Manager extends Component {
         </Button>
         </div>
         <Divider />
+
+        <Dialog
+        width = "500px"
+        open={this.state.open}
+        onClose={this.handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          <ReactTable
+          style = {{width: "100%", margin:"10px"}}
+          showPagination={false}
+          sortable={false}
+          data={this.state.listHistory}
+          pageSize={this.state.listHistory.length>0?this.state.listHistory.length:5}
+          columns={[
+            {
+              Header: "Giai đoạn",
+              accessor: "ten_giaidoan",
+              width:"200"
+            },
+            {
+              Header: "Trạng thái",
+              accessor: "Status",
+              width:"200"
+            },
+            {
+              Header: "Ghi chú",
+              accessor: "note",
+              width:"200"
+            },
+          ]}
+          defaultPageSize={10}
+          className="-striped -highlight"
+        />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.handleClose} color="primary" autoFocus>
+            quay lại
+          </Button>
+        </DialogActions>
+      </Dialog>
       </div>
 
     );
@@ -236,7 +303,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getData: (value, after) => { dispatch(getData(value, after)) },
     save: (value, after) => { dispatch(save(value, after)) },
-
+    getHistory: (value, after) => { dispatch(getHistory(value, after)) },
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Manager));

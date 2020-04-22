@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './main.css';
 import { connect } from 'react-redux';
-
+import { getData2 } from './actions';
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 
@@ -19,9 +19,38 @@ import {
 
 class Homepage extends Component {
 
-    componentDidMount() {
-
-    }
+    constructor(props) {
+        super(props);
+        this.state = {
+          sumUngVien: 0,
+          sumChienDich: 0,
+          Pass: 0,
+          passPerSum: 0,
+          process: 0,
+          false: 0
+        }
+      }
+      componentDidMount() {
+        this.props.getData(this.after);
+      }
+    
+    
+    
+      after = (resp) => {
+        console.log(resp)
+        this.setState({
+          sumUngVien: resp.sumUngVien,
+          sumChienDich: resp.sumChienDich,
+          pass: resp.pass / resp.sumUngVien *100,
+          process: resp.process / resp.sumUngVien *100,
+          false: (resp.sumUngVien - resp.process - resp.pass) / resp.sumUngVien *100,
+          passPerSum: resp.pass / resp.sumUngVien *100,
+          listVT: resp.listVT,
+          listVTTT:resp.listVTTT,
+          listVTNC:resp.listVTNC
+        })
+    
+      }
 
     useStyles = makeStyles(theme => ({
         root: {
@@ -47,7 +76,7 @@ class Homepage extends Component {
                         xl={3}
                         xs={12}
                     >
-                        <Budget />
+                        <Budget value = {this.state.sumChienDich}/>
                     </Grid>
                     <Grid
                         item
@@ -56,7 +85,7 @@ class Homepage extends Component {
                         xl={3}
                         xs={12}
                     >
-                        <TotalUsers />
+                        <TotalUsers value = {this.state.sumUngVien}/>
                     </Grid>
                     <Grid
                         item
@@ -65,7 +94,7 @@ class Homepage extends Component {
                         xl={3}
                         xs={12}
                     >
-                        <TasksProgress />
+                        <TasksProgress value = {this.state.passPerSum}/>
                     </Grid>
                     <Grid
                         item
@@ -74,7 +103,7 @@ class Homepage extends Component {
                         xl={3}
                         xs={12}
                     >
-                        <TotalProfit />
+                        <TotalProfit value = "2000000"/>
                     </Grid>
                     <Grid
                         item
@@ -83,7 +112,7 @@ class Homepage extends Component {
                         xl={9}
                         xs={12}
                     >
-                        <LatestSales />
+                        <LatestSales listVT = {this.state.listVT} listVTTT={this.state.listVTTT} listVTNC={this.state.listVTNC}/>
                     </Grid>
                     <Grid
                         item
@@ -92,26 +121,9 @@ class Homepage extends Component {
                         xl={3}
                         xs={12}
                     >
-                        <UsersByDevice />
+                        <UsersByDevice pass = {this.state.pass} false = {this.state.false} process = {this.state.process}/>
                     </Grid>
-                    <Grid
-                        item
-                        lg={4}
-                        md={6}
-                        xl={3}
-                        xs={12}
-                    >
-                        <LatestProducts />
-                    </Grid>
-                    <Grid
-                        item
-                        lg={8}
-                        md={12}
-                        xl={9}
-                        xs={12}
-                    >
-                        <LatestOrders />
-                    </Grid>
+                    
                 </Grid>
             </div>
 
@@ -122,11 +134,13 @@ class Homepage extends Component {
 
 
 const mapStateToProps = (state) => {
-
-};
-
-const mapDispatchToProps = (dispatch, props) => {
     return {
     }
-}
+  };
+  
+  const mapDispatchToProps = (dispatch) => {
+    return {
+      getData: (after) => { dispatch(getData2(after)) },
+    }
+  }
 export default connect(mapStateToProps, mapDispatchToProps)(Homepage);
