@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Topbar = props => {
-  const { className, onSidebarOpen, ...rest } = props;
+  const { className, onSidebarOpen, logout, ...rest } = props;
 
   const classes = useStyles();
 
@@ -38,21 +38,14 @@ const Topbar = props => {
             alt="Logo"
             src="/images/logos/logo--white.svg"
           />
+
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>
-          <IconButton color="inherit">
-            <Badge
-              badgeContent={notifications.length}
-              color="primary"
-              variant="dot"
-            >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
           <IconButton
             className={classes.signOutButton}
             color="inherit"
+            onClick={logout}
           >
             <InputIcon />
           </IconButton>

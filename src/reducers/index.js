@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
-import users from '../pages/admin/Login/reducers';
 import campaign from '../pages/user/Campaign/reducers';
+import partnerInfo from '../pages/admin/Account/reducers';
+
+
 
 
 const appReducers = combineReducers({
-    users,
-    campaign
+    campaign,
+    partnerInfo
 });
 
 export default appReducers;

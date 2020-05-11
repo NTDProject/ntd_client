@@ -3,11 +3,14 @@ import { connect } from 'react-redux';
 
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
-import { getData, toThemChienDich } from './actions';
+import { getData, toThemChienDich, deleteData } from './actions';
 import {TextField, Button, Input, InputLabel, Grid} from "@material-ui/core/";
 import {Delete, Create, Details} from '@material-ui/icons/';
 import {Redirect} from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+
 
 
 class Manager extends Component {
@@ -48,9 +51,16 @@ class Manager extends Component {
   }
 
   delete = (value) => {
-    console.log(value)
+    this.props.deleteData(value, this.afterDelete)
   }
 
+  afterDelete = (resp) => {
+    if(resp.status){
+      NotificationManager.success('Success', resp.message, 3000);
+    }else{
+      NotificationManager.error('Error', resp.message, 3000);
+    }
+  }
 
 
   onChangeFillter = async (e) => {
@@ -75,7 +85,7 @@ class Manager extends Component {
   render() {
     return (
       <div >
-        
+        <NotificationContainer />
         <div style={{ padding: "20px 10px 20px 10px", fontWeight: "bold" }}>
           Chiến dịch tuyển dụng
         </div>
@@ -120,7 +130,6 @@ class Manager extends Component {
               <div style = {{textAlign: "center"}}>
                 <Delete onClick = {() => this.delete(props.row)}/>{' '}
                 <Create onClick = {() => this.editChienDich(props.row)}/>{' '}
-                <Details/>
               </div>
             }
             
@@ -149,6 +158,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     toPage: (value) => {dispatch(toThemChienDich(value))},
     getData: (value, after) => { dispatch(getData(value, after)) },
+    deleteData: (value, after) => { dispatch(deleteData(value, after)) },
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Manager));

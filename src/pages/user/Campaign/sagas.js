@@ -8,6 +8,7 @@ import callApiUnauthWithBody from "../../../utils/apis/apiUnAuth"
 function* wathCampaignAction(){
     yield takeLatest (Types.GET_DATA_CAMPAIGN, getDataSaga)
     yield takeLatest (Types.TO_THEM_CHIEN_DICH, getThemChienDich)
+    yield takeLatest (Types.DELETE_DATA_CAMPAIGN, deleteDataSaga)
 }
 
 function*  getThemChienDich({payload}){
@@ -24,6 +25,12 @@ function*  getDataSaga({payload}){
     else{
         yield put(actions.getDataFalse(resp))
     }
+}
+
+function*  deleteDataSaga({payload}){
+    var resp = yield call(callApiUnauthWithBody,"chiendich/delete","POST",payload.value);
+    console.log(resp)
+    yield call(payload.after,resp.data)
 }
 
 

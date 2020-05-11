@@ -5,6 +5,7 @@ import { makeStyles, useTheme } from '@material-ui/styles';
 import { useMediaQuery } from '@material-ui/core';
 
 import { Sidebar, Topbar, Footer } from './components';
+import { withRouter } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 const Main = props => {
   const { children } = props;
-
+  const { history } = props;
   const classes = useStyles();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
@@ -36,6 +37,14 @@ const Main = props => {
   const handleSidebarOpen = () => {
     setOpenSidebar(true);
   };
+
+  const logout = () => {
+    console.log("logout ...")
+    localStorage.clear();
+
+    
+    history.push('/');
+  }
 
   const handleSidebarClose = () => {
     setOpenSidebar(false);
@@ -50,7 +59,7 @@ const Main = props => {
         [classes.shiftContent]: isDesktop
       })}
     >
-      <Topbar onSidebarOpen={handleSidebarOpen} />
+      <Topbar onSidebarOpen={handleSidebarOpen} logout = {logout}/>
       <Sidebar
         onClose={handleSidebarClose}
         open={shouldOpenSidebar}
@@ -68,4 +77,4 @@ Main.propTypes = {
   children: PropTypes.node
 };
 
-export default Main;
+export default withRouter(Main);

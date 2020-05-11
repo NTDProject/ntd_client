@@ -3,12 +3,19 @@ import { connect } from 'react-redux';
 
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
-import { getData, getDataCP } from './actions';
+import { getData, getDataCP, deleteData } from './actions';
 import { TextField, Button, Input, InputLabel, Grid, MenuItem, Select } from "@material-ui/core/";
 import { Delete, Create, Details } from '@material-ui/icons/';
 import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ReactExport from "react-export-excel";
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 
 class Manager extends Component {
@@ -43,7 +50,16 @@ class Manager extends Component {
   }
 
   delete = (value) => {
-    console.log(value)
+    this.props.deleteData({ungvien_id:value.ungvien_id, chiendich_id: this.state.chienDichId}, this.afterDelete)
+  }
+
+  afterDelete = (resp) => {
+    if(resp.status){
+      NotificationManager.success('Success', resp.message, 3000);
+      this.props.getData(this.state.chienDichId, this.after);
+    }else{
+      NotificationManager.error('Error', resp.message, 3000);
+    }
   }
 
 
@@ -95,6 +111,7 @@ class Manager extends Component {
     })
     return (
       <div >
+        <NotificationContainer />
         <ToastContainer/>
         <div style={{ padding: "20px 10px 20px 10px", fontWeight: "bold" }}>
           Ứng viên
@@ -112,8 +129,15 @@ class Manager extends Component {
             }
           </Select>{' '}
           <Button variant="contained" color="secondary" onClick={this.themChienDich}>Thêm ưng viên mới</Button>{' '}
-          <Button variant="contained" color="secondary" onClick={this.themUngVienCoSan}>Thêm ứng viên có sẵn</Button>
-
+          <Button variant="contained" color="secondary" onClick={this.themUngVienCoSan}>Thêm ứng viên có sẵn</Button>{' '}
+          <ExcelFile element={<Button variant="contained" color="secondary">Download</Button>}>
+                <ExcelSheet data={this.state.UngVienList} name={"Ứng viên - " + this.state.ten_chiendich}>
+                    <ExcelColumn label="Tên ứng viên" value="tenungvien"/>
+                    <ExcelColumn label="Email" value="email"/>
+                    {/* <ExcelColumn label="Gender" value="sex"/> */}
+                    
+                </ExcelSheet>
+            </ExcelFile>
         </div>
 
 
@@ -142,7 +166,6 @@ class Manager extends Component {
                 <div style={{ textAlign: "center" }}>
                   <Delete onClick={() => this.delete(props.row)} />{' '}
                   <Create onClick={() => this.editChienDich(props.row)} />{' '}
-                  <Details />
                 </div>
             }
 
@@ -170,6 +193,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getData: (value, after) => { dispatch(getData(value, after)) },
+    deleteData: (value, after) => { dispatch(deleteData(value, after)) },
     getDataCP: (afterCP) => { dispatch(getDataCP( afterCP)) },
   }
 }

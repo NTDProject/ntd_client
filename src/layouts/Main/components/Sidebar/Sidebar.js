@@ -6,6 +6,11 @@ import { Divider, Drawer } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PeopleIcon from '@material-ui/icons/People';
 import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
+import BallotIcon from '@material-ui/icons/Ballot';
+import AccountTreeIcon from '@material-ui/icons/AccountTree';
 
 import { Profile, SidebarNav } from './components';
 
@@ -39,7 +44,7 @@ const Sidebar = props => {
 
   const pages = [
     {
-      title: 'Dashboard',
+      title: 'Trang chủ',
       href: '/',
       icon: <DashboardIcon />
     },
@@ -52,11 +57,26 @@ const Sidebar = props => {
       href: '/UngVien',
       icon: <PeopleIcon />
     },{
-      title: 'Products',
-      href: '/product',
-      icon: <ShoppingBasketIcon />
+      title: 'Chi phí',
+      href: '/cost',
+      icon: <AttachMoneyIcon />
+    },{
+      title: 'Vị trí',
+      href: '/vitri',
+      icon: <AccountTreeIcon />
+    },{
+      title: 'Giai đoạn',
+      href: '/giaidoan',
+      icon: <BallotIcon />
+    },{
+      title: 'Tạo tài khoản',
+      href: '/signup',
+      icon: <PersonAddIcon />
+    },{
+      title: 'Đổi mật khẩu',
+      href: '/changepass',
+      icon: <VpnKeyIcon />
     }
-    
   ];
 
   return (

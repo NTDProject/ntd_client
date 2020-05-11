@@ -8,6 +8,13 @@ export const getData = (value,after) => {
     }
 }
 
+export const deleteData = (value,after) => {
+    return {
+        type : Types.DELETE_DATA_CAMPAIGN,
+        payload: {value,after}
+    }
+}
+
 export const getDataSuccess = (data) => {
     return {
         type : Types.GET_DATA_CAMPAIGN_SUCCESS,

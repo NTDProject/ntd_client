@@ -27,9 +27,8 @@ const Profile = props => {
   const classes = useStyles();
 
   const user = {
-    name: 'Shen Zhi',
-    avatar: '/images/avatars/avatar_11.png',
-    bio: 'Brain Director'
+    name: JSON.parse(localStorage.getItem("username")).username,
+    // avatar: '/images/avatars/avatar_11.png',
   };
 
   return (

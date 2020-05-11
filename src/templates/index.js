@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import _ from 'lodash';
 
 import AdminLayout from './admin';
-import PartnerLayout from './partner';
 import adminRoutes from './routes/adminRoutes';
 // import partnerRoutes from './routes/partnerRoutes';
 
