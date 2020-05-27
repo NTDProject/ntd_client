@@ -28,6 +28,9 @@ class Manager extends Component {
   }
   componentDidMount() {
     this.props.getData(this.getParam(), this.after);
+    if(this.props.route.location.state != null){
+      NotificationManager.success('Success', this.props.route.location.state.resp.message, 3000);
+    }
   }
 
   getParam = () => {
@@ -57,6 +60,7 @@ class Manager extends Component {
   afterDelete = (resp) => {
     if(resp.status){
       NotificationManager.success('Success', resp.message, 3000);
+      this.props.getData(this.getParam(), this.after);
     }else{
       NotificationManager.error('Error', resp.message, 3000);
     }

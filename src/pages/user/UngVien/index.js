@@ -25,11 +25,16 @@ class Manager extends Component {
       UngVienList: [],
       chienDichId: "",
       ListCampaign:[],
-      ten_chiendich: ""
+      ten_chiendich: "",
+      listDownload: []
     }
   }
   componentDidMount() {
+    this.props.getData(this.after)
     this.props.getDataCP( this.afterCP);
+    if(this.props.route.location.state != null){
+      NotificationManager.success('Success', this.props.route.location.state.resp.message, 3000);
+    }
   }
 
 
@@ -67,10 +72,10 @@ class Manager extends Component {
     let chienDichId = this.state.chienDichId
     let ten_chiendich = this.state.ten_chiendich
     if(chienDichId == "" || chienDichId == undefined || chienDichId== null){
-      toast("Vui lòng chọn chiến dịch")
+      NotificationManager.error('Error', "Vui lòng chọn chiến dịch", 3000);
     }
     else{
-      let path = `/UngVien/addOrEdit`;
+      let path = `/UngVien/Create`;
       this.props.history.push({ pathname: path, state: { chiendich_id: chienDichId, ungvien_id: "addPage", ten_chiendich: ten_chiendich} });
     }
   }
@@ -78,20 +83,24 @@ class Manager extends Component {
   themUngVienCoSan = () => {
     let chienDichId = this.state.chienDichId
     let ten_chiendich = this.state.ten_chiendich
-    let path = `/UngVien/add`;
+    if(chienDichId == "" || chienDichId == undefined || chienDichId== null){
+      NotificationManager.error('Error', "Vui lòng chọn chiến dịch", 3000);
+    }
+    else{
+      let path = `/UngVien/add`;
       this.props.history.push({ pathname: path, state: {chiendich_id: chienDichId, ten_chiendich: ten_chiendich}})
+    }
   }
   editChienDich = (value) => {
     let chienDichId = this.state.chienDichId
     let ten_chiendich = this.state.ten_chiendich
     let path = `/UngVien/addOrEdit`;
-    this.props.history.push({ pathname: path, state: { chiendich_id: chienDichId, ungvien_id: value._original.ungvien_id, ten_chiendich: ten_chiendich } });
+    this.props.history.push({ pathname: path, state: value._original });
   }
 
   handleChangeInputText = e => {
 
     let ListCampaign = [...(this.state.ListCampaign)]
-    console.log("start",e)
     let value = e.target.value
     let ten_chiendich = ListCampaign.filter(Campaign => Campaign.chiendich_id == value)
     this.setState({
@@ -99,10 +108,14 @@ class Manager extends Component {
       ten_chiendich:   ten_chiendich[0].ten_chiendich
     });
 
-    this.props.getData(e.target.value, this.after);
-    console.log("finish",this.state.ListCampaign)
   };
 
+  handleFilterChange = () => {
+    const listDownload = this.selectTable.getResolvedState().sortedData;
+    this.setState({
+      listDownload:listDownload
+    })
+  }
   render() {
     const ListCampaign = this.state.ListCampaign.map(c => {
       return(
@@ -112,13 +125,11 @@ class Manager extends Component {
     return (
       <div >
         <NotificationContainer />
-        <ToastContainer/>
         <div style={{ padding: "20px 10px 20px 10px", fontWeight: "bold" }}>
           Ứng viên
         </div>
 
-        <div style={{ padding: "20px 10px 20px 10px", fontWeight: "bold" }}>
-          <Select
+        <div style={{ padding: "20px 10px 20px 10px", fontWeight: "bold" }}><Select
             style = {{width: "500px"}}
             value={this.state.chienDichId}
             input={<Input />}
@@ -130,24 +141,30 @@ class Manager extends Component {
           </Select>{' '}
           <Button variant="contained" color="secondary" onClick={this.themChienDich}>Thêm ưng viên mới</Button>{' '}
           <Button variant="contained" color="secondary" onClick={this.themUngVienCoSan}>Thêm ứng viên có sẵn</Button>{' '}
+
           <ExcelFile element={<Button variant="contained" color="secondary">Download</Button>}>
-                <ExcelSheet data={this.state.UngVienList} name={"Ứng viên - " + this.state.ten_chiendich}>
+                <ExcelSheet data={this.state.listDownload} name={"Ứng viên - " + this.state.ten_chiendich}>
                     <ExcelColumn label="Tên ứng viên" value="tenungvien"/>
                     <ExcelColumn label="Email" value="email"/>
-                    {/* <ExcelColumn label="Gender" value="sex"/> */}
-                    
                 </ExcelSheet>
             </ExcelFile>
         </div>
 
-
+        
         
         <ReactTable
+          ref={(r) => {this.selectTable = r;}}
           style={{ width: "98%", margin: "10px" }}
           showPagination={true}
           sortable={false}
           data={this.state.UngVienList}
           pageSizeDefault={10}
+          onFilteredChange={this.handleFilterChange}
+          defaultFilterMethod={
+            (filter, row) =>
+            filter.id in row ? row[filter.id].includes(filter.value) : true
+
+          }
           columns={[
             {
               Header: "Tên ứng viên",
@@ -160,11 +177,26 @@ class Manager extends Component {
               filterable: true,
             },
             {
+              Header: "Chiến dịch",
+              accessor: "ten_chiendich",
+              filterable: true,
+            },
+            {
+              Header: "Vị trí",
+              accessor: "ten_vitri",
+              filterable: true,
+            },
+            {
+              Header: "Giai đoạn",
+              accessor: "ten_giaidoan",
+              filterable: true,
+            },
+            {
               Header: "Thao tác",
               accessor: "ungvien_id",
               Cell: (props) =>
                 <div style={{ textAlign: "center" }}>
-                  <Delete onClick={() => this.delete(props.row)} />{' '}
+                  {/* <Delete onClick={() => this.delete(props.row)} />{' '} */}
                   <Create onClick={() => this.editChienDich(props.row)} />{' '}
                 </div>
             }
@@ -192,9 +224,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getData: (value, after) => { dispatch(getData(value, after)) },
+    getData: ( after) => { dispatch(getData(after)) },
     deleteData: (value, after) => { dispatch(deleteData(value, after)) },
-    getDataCP: (afterCP) => { dispatch(getDataCP( afterCP)) },
+    getDataCP: ( after) => { dispatch(getDataCP(after)) },
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Manager));

@@ -12,6 +12,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { withRouter } from 'react-router-dom';
 import DualListBox from 'react-dual-listbox';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -53,10 +55,12 @@ class Manager extends Component {
     let uv = [...resp.ungvien]
     uv.map(u => {
       resp.vitri.map(v => {
-        u[v.vitri_id] = 0
+        u[v.vitri_id.toString()] = 0
       })
       a.push(u)
     })
+
+    console.log(a)
     
     this.setState({
       UngVien : a,
@@ -112,11 +116,21 @@ class Manager extends Component {
   }
 
   afterSave = (resp) => {
-    toast(resp.message)
+     if(resp.status){
+      let path = "/UngVien"
+      this.props.history.push({pathname:path,state:{resp}});
+    }else{
+      NotificationManager.error('Error', resp.message, 3000);
+    }
   }
 
   onChange = (e) => {
     console.log(e)
+  }
+
+  back = () => {
+    let path = "/UngVien"
+      this.props.history.push({pathname:path});
   }
 
   render() {
@@ -124,7 +138,6 @@ class Manager extends Component {
       {
         Header: "Tên",
         accessor: "tenungvien",
-
       },
       {
         Header: "Email",
@@ -136,7 +149,7 @@ class Manager extends Component {
       column.push(
         {
           Header: v.ten_vitri,
-          accessor: v.vitri_id,
+          accessor:v.vitri_id.toString(),
           Cell: (props) => 
           <div style = {{textAlign: "center"}}>
             <input type = "checkbox" checked = {props.value > 0} name = {v.vitri_id } id = {v.vitri_id + "-" + props.row._original.ungvien_id} onClick = {(e ) => this.handleChangeInputOnCell(e,props.row)}/>
@@ -152,7 +165,7 @@ class Manager extends Component {
     return (
 
       <div style={{ margin: "20px" }}>
-        <ToastContainer />
+        <NotificationContainer />
         <h2>Thêm ứng viên</h2>
         <ReactTable
           style = {{width: "98%", margin:"10px"}}
@@ -172,7 +185,7 @@ class Manager extends Component {
         <Button variant="contained" color="secondary" onClick = {this.save}>
           <Save/>{' '}Lưu
         </Button> {' '}
-        <Button variant="contained" color="secondary">
+        <Button variant="contained" color="secondary" onClick = {this.back}>
           Quay lại
         </Button>
         </div>

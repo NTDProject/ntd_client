@@ -7,23 +7,21 @@ import callApiUnauthWithBody from "../../../utils/apis/apiUnAuth"
 
 function* wathCampaignAction(){
     yield takeLatest (Types.GET_DATA_UNGVIEN, getDataSaga)
-    yield takeLatest (Types.GET_DATA_CAMPAIGN, getDataCPSaga)
     yield takeLatest (Types.DELETE_UNGVIEN, deleteDataSaga)
-
+    yield takeLatest (Types.GET_DATA_CAMPAIGN, getDataCPSaga)
+    
 }
 
 
 
 function*  getDataSaga({payload}){
-    var resp = yield call(callApiUnauthWithBody,"ungvien/getUngVienByChienDich/"+payload.value,"GET",{});
-    console.log(resp)
-    if(resp.statusText == "OK") {
-        yield call(payload.after,resp.data)
-        yield put(actions.getDataSuccess(resp.data))
-    }
-    else{
-        yield put(actions.getDataFalse(resp))
-    }
+    var resp = yield call(callApiUnauthWithBody,"ungvien/","GET",{});
+    yield call(payload.after,resp.data)
+}
+
+function*  getDataCPSaga({payload}){
+    var resp = yield call(callApiUnauthWithBody,"chienDich/","GET",{});
+    yield call(payload.after,resp.data)
 }
 
 function*  deleteDataSaga({payload}){
@@ -33,12 +31,6 @@ function*  deleteDataSaga({payload}){
     yield call(payload.after,resp.data)
 }
 
-function*  getDataCPSaga({payload}){
-    console.log(payload)
-    var resp = yield call(callApiUnauthWithBody,"chiendich/","GET",{});
-    yield call(payload,resp.data)
-
-}
 
 
 

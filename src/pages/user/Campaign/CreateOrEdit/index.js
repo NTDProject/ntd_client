@@ -11,6 +11,8 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -101,16 +103,16 @@ class Manager extends Component {
     })
 
     if(tenChienDich == null || tenChienDich == undefined || tenChienDich == ""){
-      toast("Không được để trống tên chiến dịch")
+      NotificationManager.error('Error', "Không được để trống tên chiến dịch", 3000);
     }
     else if(ngayBatDau == null || ngayBatDau == undefined || ngayBatDau == ''){
-      toast("Không được để trống ngày bắt đầu")
+      NotificationManager.error('Error', "Không được để trống ngày bắt đầu", 3000);
     }
     else if(ngayKetThuc == null || ngayKetThuc == undefined || ngayKetThuc == ''){
-      toast("Không được để trống ngày kết thúc")
+      NotificationManager.error('Error', "Không được để trống ngày kết thúc", 3000);
     }
     else if(canTuyen <= 0){
-      toast("Số lượng cần tuyển phải lớn hơn 0")
+      NotificationManager.error('Error', "Số lượng cần tuyển phải lớn hơn 0", 3000);
     }
     else{
       const{ngayBatDau, ngayKetThuc, tenChienDich, ListViTri, idChienDich} = this.state
@@ -141,7 +143,7 @@ class Manager extends Component {
       ListViTri: ListViTri
     }
     if(!resp.status){
-      toast(resp.message)
+      NotificationManager.error('Error', resp.message, 3000);
     }
     else{
       this.props.save(value,this.afterSave)
@@ -149,8 +151,13 @@ class Manager extends Component {
   }
 
   afterSave = (resp) => {
-    console.log(resp)
-    toast(resp.message)
+    if(resp.status){
+      let path = `/campaign`;
+      this.props.history.push({pathname:path,state:{resp}});
+    }else{
+      NotificationManager.error('Error', resp.message, 3000);
+    }
+    
 
   }
 
@@ -162,14 +169,14 @@ class Manager extends Component {
 
   back = () => {
     let path = `/campaign`;
-    this.props.history.push({pathname:path,state:{}});
+    this.props.history.push({pathname:path});
   }
   render() {
     
     return (
 
       <div style={{ margin: "20px" }}>
-        <ToastContainer />
+        <NotificationContainer />
         <div style={{ padding: "20px" }}>
           <Typography variant="subtitle1" gutterBottom>
             Thông tin chung:
@@ -259,9 +266,9 @@ class Manager extends Component {
         <Button variant="contained" color="secondary" onClick = {this.save}>
           <Save/>{' '}Lưu
         </Button> {' '}
-        <Button variant="contained" color="secondary" onClick = {this.tranfer}>
+        {/* <Button variant="contained" color="secondary" onClick = {this.tranfer}>
           Chuyển giai đoạn
-        </Button>{' '}
+        </Button>{' '} */}
         <Button variant="contained" color="secondary" onClick = {this.back}>
           Quay lại
         </Button>

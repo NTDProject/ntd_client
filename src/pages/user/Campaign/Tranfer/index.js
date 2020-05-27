@@ -26,14 +26,15 @@ class Manager extends Component {
       UngVien:[],
       ListGiaiDoan:[],
       ngayhen: new Date(),
-      giaidoanhientai:"",
       giaidoansau:"",
       diadiemhen:"",
+      giaidoansau_id:"",
+      giaidoanhientai_id: "",
+      giaidoanhientai:"",
+      diadiemhen_id:"",
       chiendich_id: "",
       ten_chiendich:"",
-      giaidoanhientai_id: "",
-      diadiemhen_id:"",
-      giaidoansau_id:"",
+      
     }
   }
   componentDidMount() {

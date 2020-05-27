@@ -21,6 +21,11 @@ const UngVienCreateOrEdit = Loadable({
   loading: MyLoadingComponent
 });
 
+const UngVienCreate = Loadable({
+  loader: () => import("../../pages/user/UngVien/Create"),
+  loading: MyLoadingComponent
+});
+
 const UngVien = Loadable({
   loader: () => import("../../pages/user/UngVien"),
   loading: MyLoadingComponent
@@ -147,6 +152,7 @@ const routes = {
     component: CampaignCreateOrEdit,
     private: true
   },
+  
   UngVien: {
     path: '/UngVien',
     exact: true,
@@ -157,6 +163,12 @@ const routes = {
     path: '/UngVien/addOrEdit',
     exact: true,
     component: UngVienCreateOrEdit,
+    private: true
+  },
+  UngVienCreate: {
+    path: '/UngVien/Create',
+    exact: true,
+    component: UngVienCreate,
     private: true
   },
   AddUngVien: {

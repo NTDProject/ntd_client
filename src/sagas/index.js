@@ -5,6 +5,7 @@ import CampaignTranferSaga from '../pages/user/Campaign/Tranfer/sagas';
 import CampaignUngVienSaga from '../pages/user/UngVien/sagas';
 import CampaignAddUngVienSaga from '../pages/user/UngVien/Add/sagas';
 import UngVienDetailSaga from '../pages/user/UngVien/CreateOrEdit/sagas';
+import UngVienCreateSaga from '../pages/user/UngVien/Create/sagas';
 import AnalysisSaga from '../pages/admin/HomePage/sagas';
 import CostSaga from '../pages/user/Cost/sagas';
 import CostAddfrom from '../pages/user/Cost/CreateOrEdit/sagas';
@@ -32,4 +33,5 @@ export default function* IndexSaga () {
   yield fork(ViTri);
   yield fork(ViTriAdd);
   yield fork(Acc);
+  yield fork(UngVienCreateSaga);
 }

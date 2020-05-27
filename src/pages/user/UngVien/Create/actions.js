@@ -8,20 +8,6 @@ export const getData = (value,after) => {
     }
 }
 
-export const getDataGiaiDoan = (value,after) => {
-    return {
-        type : Types.GET_DATA_GIAIDOAN,
-        payload: {value,after}
-    }
-}
-
-export const tranfer = (value,after) => {
-    return {
-        type : Types.TRANFER_UNGVIEN,
-        payload: {value,after}
-    }
-}
-
 export const getHistory = (value,after) => {
     return {
         type : Types.GET_DATA_HISTORY,
