@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { getData, saveCampaign, checkSaveCampaign } from './actions';
+import { deleteData } from '../../UngVien/actions';
 import { Save } from '@material-ui/icons/';
 import { Button, Grid, Typography, Divider } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
@@ -13,7 +14,7 @@ import { withRouter } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-
+import { Delete, Create, Details } from '@material-ui/icons/';
 import "react-datepicker/dist/react-datepicker.css";
 
 
@@ -29,7 +30,8 @@ class Manager extends Component {
       ngayKetThuc: new Date(),
       tenChienDich: "",
       ListViTri: [],
-      idChienDich: ""
+      idChienDich: "",
+      ListUV: []
     }
   }
   componentDidMount() {
@@ -57,8 +59,9 @@ class Manager extends Component {
       giaidoanhientai_id: resp.giaidoanhientai_id,
       giaidoansau_id: resp.giaidoansau_id,
       ListViTri: resp.ListViTri,
+      ListUV: resp.ListUV
     })
-
+    console.log(resp)
   }
 
   handleChangeNgayBatDau = date => {
@@ -131,6 +134,27 @@ class Manager extends Component {
     }
   }
 
+  editChienDich = (value) => {
+    let path = `/UngVien/addOrEdit`;
+    this.props.history.push({ pathname: path, state: value._original });
+  }
+
+    delete =   (value) => {
+    console.log("aa", value._original)
+    this.props.deleteData(value._original, this.afterDelete)
+  }
+
+  afterDelete = (resp) => {
+    if(resp.status){
+      NotificationManager.success('Success', resp.message, 3000);
+      this.props.getData(this.state.chienDichId, this.after);
+    }else{
+      NotificationManager.error('Error', resp.message, 3000);
+    }
+    
+    this.props.getData(this.state.idChienDich,this.after)
+  }
+
   afterCheckSave = (resp) => {
     const{ngayBatDau, ngayKetThuc, tenChienDich, ListViTri, idChienDich} = this.state
     let value = {
@@ -188,13 +212,7 @@ class Manager extends Component {
             <Grid item xs={3}>
               <input type="text" name="tenChienDich" value = {this.state.tenChienDich} onChange = {this.handleChangeInputText}/>
             </Grid>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Giai đoạn:</span>
-            </Grid>
-            <Grid item xs={4}>
-              <input type="text" name="giaidoanhientai" value = {this.state.giaidoanhientai} />
-            </Grid>
+            <Grid item xs={7}></Grid>
             <Grid item xs={2}>
               <span style={{ marginRight: "50px" }}>Ngày bắt đầu:</span>
             </Grid>
@@ -262,13 +280,74 @@ class Manager extends Component {
           </Grid>
         </div>
         <Divider />
+        <div style={{ padding: "20px" }}>
+          <Typography variant="subtitle1" gutterBottom>
+            Danh sách ứng viên :
+          </Typography>
+          <Grid container spacing={3}>
+          <ReactTable
+          ref={(r) => {this.selectTable = r;}}
+          style={{ width: "98%", margin: "10px" }}
+          showPagination={true}
+          sortable={false}
+          data={this.state.ListUV}
+          pageSizeDefault={10}
+          onFilteredChange={this.handleFilterChange}
+          defaultFilterMethod={
+            (filter, row) =>
+            filter.id in row ? row[filter.id].includes(filter.value) : true
+
+          }
+          columns={[
+            {
+              Header: "Tên ứng viên",
+              accessor: "tenungvien",
+              filterable: true,
+            },
+            {
+              Header: "Email",
+              accessor: "email",
+              filterable: true,
+            },
+            {
+              Header: "Chiến dịch",
+              accessor: "ten_chiendich",
+              filterable: true,
+            },
+            {
+              Header: "Vị trí",
+              accessor: "ten_vitri",
+              filterable: true,
+            },
+            {
+              Header: "Giai đoạn",
+              accessor: "ten_giaidoan",
+              filterable: true,
+            },
+            {
+              Header: "Thao tác",
+              accessor: "ungvien_id",
+              Cell: (props) =>
+                <div style={{ textAlign: "center" }}>
+                  <Delete onClick={() => this.delete(props.row)} />{' '}
+                  <Create onClick={() => this.editChienDich(props.row)} />{' '}
+                </div>
+            }
+
+          ]}
+          defaultPageSize={10}
+          className="-striped -highlight"
+        />
+          </Grid>
+        </div>
+        <Divider />
         <div style ={{textAlign: "center", margin: "20px"}}>
         <Button variant="contained" color="secondary" onClick = {this.save}>
           <Save/>{' '}Lưu
         </Button> {' '}
-        {/* <Button variant="contained" color="secondary" onClick = {this.tranfer}>
+        <Button variant="contained" color="secondary" onClick = {this.tranfer}>
           Chuyển giai đoạn
-        </Button>{' '} */}
+        </Button>{' '}
         <Button variant="contained" color="secondary" onClick = {this.back}>
           Quay lại
         </Button>
@@ -290,6 +369,7 @@ const mapDispatchToProps = (dispatch) => {
     getData: (value, after) => { dispatch(getData(value, after)) },
     save: (value, after) => { dispatch(saveCampaign(value, after)) },
     checksave: (value, after) => { dispatch(checkSaveCampaign(value, after)) },
+    deleteData: (value, after) => { dispatch(deleteData(value, after)) },
   }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Manager));

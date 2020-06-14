@@ -54,8 +54,9 @@ class Manager extends Component {
 
   }
 
-  delete = (value) => {
-    this.props.deleteData({ungvien_id:value.ungvien_id, chiendich_id: this.state.chienDichId}, this.afterDelete)
+  delete =   (value) => {
+    console.log("aa", value._original)
+    this.props.deleteData(value._original, this.afterDelete)
   }
 
   afterDelete = (resp) => {
@@ -65,6 +66,7 @@ class Manager extends Component {
     }else{
       NotificationManager.error('Error', resp.message, 3000);
     }
+    this.props.getData(this.after)
   }
 
 
@@ -92,8 +94,6 @@ class Manager extends Component {
     }
   }
   editChienDich = (value) => {
-    let chienDichId = this.state.chienDichId
-    let ten_chiendich = this.state.ten_chiendich
     let path = `/UngVien/addOrEdit`;
     this.props.history.push({ pathname: path, state: value._original });
   }
@@ -196,7 +196,7 @@ class Manager extends Component {
               accessor: "ungvien_id",
               Cell: (props) =>
                 <div style={{ textAlign: "center" }}>
-                  {/* <Delete onClick={() => this.delete(props.row)} />{' '} */}
+                  <Delete onClick={() => this.delete(props.row)} />{' '}
                   <Create onClick={() => this.editChienDich(props.row)} />{' '}
                 </div>
             }
