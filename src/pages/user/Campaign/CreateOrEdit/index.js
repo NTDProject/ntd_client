@@ -30,9 +30,11 @@ class Manager extends Component {
       ngayKetThuc: new Date(),
       tenChienDich: "",
       ListViTri: [],
+      ListYeuCau: [],
       idChienDich: "",
       ListUV: [],
-      open: false
+      open: false,
+      vitriYeuCau: 0
     }
   }
   componentDidMount() {
@@ -95,9 +97,58 @@ class Manager extends Component {
     })
   }
 
+  handleChangeInputOnCell4 = value => {
+    let yeuCau = this.state.ListYeuCau
+    yeuCau.map(yc => {
+      if(yc.yeucau_id == value._original.yeucau_id){
+        if(value._original.checkYC == 0){
+          yc.checkYC = 1
+        }
+        else{
+          yc.checkYC = 0
+        }
+      }
+    })
+    this.setState({
+      ListYeuCau: yeuCau
+    })
+  }
+
   handleChangeInputOnCell2 = value => {
     this.setState({
-      open: true
+      open: true,
+      ListYeuCau: value._original.yeucau,
+      vitriYeuCau: value._original.vitri_id,
+    })
+  }
+
+  saveYeuCau = () => {
+    let vitri  = this.state.ListViTri
+    vitri.map(vt => {
+      if(vt.yeucau_id == this.state.vitriYeuCau){
+        vitri.yeucau = this.state.ListYeuCau
+      }
+    })
+    this.setState({
+      open: false,
+      ListViTri: vitri
+    })
+  }
+
+  handleChangeInputOnCell3 = (e,value) => {
+    let UngVien = this.state.UngVien
+    UngVien.map(u => {
+      if(u.ungvien_id == value._original.ungvien_id){
+          if(document.getElementById(e.target.name + "-" + value._original.ungvien_id).checked){
+            u[e.target.name] = 1
+          }
+          else{
+            u[e.target.name] = 0
+          }
+      }
+    })
+    this.setState({
+      UngVien : UngVien
     })
   }
 
@@ -279,7 +330,7 @@ class Manager extends Component {
               Header: "Yêu cầu",
               Cell: (props) => 
               <div style = {{textAlign: "center"}}>
-                <input type = "number" id = {props.row._original.vitri_id} onClick = {() => this.handleChangeInputOnCell2(props.row)}  defaultValue = {props.value}/>
+                <Button  variant="contained" color="secondary" onClick = {() => this.handleChangeInputOnCell2(props.row)}>Chỉnh sửa yêu cầu</Button>
               </div>
 
             },
@@ -367,9 +418,9 @@ class Manager extends Component {
         <Button variant="contained" color="secondary" onClick = {this.save}>
           <Save/>{' '}Lưu
         </Button> {' '}
-        <Button variant="contained" color="secondary" onClick = {this.tranfer}>
+        {/* <Button variant="contained" color="secondary" onClick = {this.tranfer}>
           Chuyển giai đoạn
-        </Button>{' '}
+        </Button>{' '} */}
         <Button variant="contained" color="secondary" onClick = {this.back}>
           Quay lại
         </Button>
@@ -389,17 +440,22 @@ class Manager extends Component {
           style = {{width: "98%", margin:"10px"}}
           showPagination={false}
           sortable={false}
-          data={this.state.ListViTri}
-          pageSize={this.state.ListViTri.length>0?this.state.ListViTri.length:5}
+          data={this.state.ListYeuCau}
+          pageSize={this.state.ListYeuCau.length>0?this.state.ListYeuCau.length:5}
           columns={[
             {
               Header: "",
-              accessor: "checkapp",
+              accessor: "checkYC",
               Cell: (props) => 
               <div style = {{textAlign: "center"}}>
-                <input type = "checkbox" checked = {props.value > 0} id = {props.row._original.vitri_id} onClick = {() => this.handleChangeInputOnCell(props.row)}/>
+                <input type = "checkbox" checked = {props.value > 0} id = {props.row._original.yeucau_id} onClick = {() => this.handleChangeInputOnCell4(props.row)}/>
               </div>,
               width: 150
+            },
+            {
+              Header: "Nội dung yêu cầu",
+              accessor: "nd_yeucau",
+              width: 500
             },
           ]}
           />

@@ -26,10 +26,12 @@ class Manager extends Component {
       ten_chiendich: "",
       tenungvien:"",
       email:"",
+      sdt:"",
       ListViTri: [],
       chiendich_id: "",
       ungvien_id: "",
-      open: false
+      open: false,
+      ListYeuCau: []
     }
   }
   componentDidMount() {
@@ -58,6 +60,7 @@ class Manager extends Component {
     this.setState({
       tenungvien: resp.tenungvien,
       email: resp.email,
+      sdt: resp.sdt,
       ListViTri: resp.ListViTri,
     })
 
@@ -100,7 +103,7 @@ class Manager extends Component {
   }
 
   save = () => {
-    const {ten_chiendich, tenungvien, email} = this.state
+    const {ten_chiendich, tenungvien, email,sdt} = this.state
     let canTuyen = 0
 
     this.state.ListViTri.map(vt => {
@@ -110,21 +113,25 @@ class Manager extends Component {
     })
 
     if(tenungvien == null || tenungvien == undefined || tenungvien == ''){
-      NotificationManager.error('Error', "Không được để trống Tên ứng viên", 3000);
+      NotificationManager.error('Error', "Không được để trống tên ứng viên", 3000);
     }
     else if(email == null || email == undefined || email == ''){
-      NotificationManager.error('Error', "Không được để trống ngày email", 3000);
+      NotificationManager.error('Error', "Không được để trống email", 3000);
+    }
+    else if(sdt == null || sdt == undefined || sdt == ''){
+      NotificationManager.error('Error', "Không được để trống số điện thoại", 3000);
     }
     else if(canTuyen <= 0){
       NotificationManager.error('Error',"Bạn phải chọn ít nhất 1 vị trí ứng tuyển", 3000);
     }
     else{
-      const {tenungvien,email,ListViTri,chiendich_id,ungvien_id} = this.state 
+      const {tenungvien,email,ListViTri,chiendich_id,ungvien_id,sdt} = this.state 
       let value = {
         chiendich_id:chiendich_id,
         ungvien_id:ungvien_id,
         ten_ungvien:tenungvien,
         email:email,
+        sdt:sdt,
         ListViTri:ListViTri
       }
       this.props.save(value,this.afterSave)
@@ -158,6 +165,44 @@ class Manager extends Component {
     this.props.history.push({pathname:path});
   }
 
+  handleChangeInputOnCell2 = value => {
+    this.setState({
+      open: true,
+      ListYeuCau: value._original.yeucau,
+      vitriYeuCau: value._original.vitri_id,
+    })
+  }
+
+  saveYeuCau = () => {
+    let vitri  = this.state.ListViTri
+    vitri.map(vt => {
+      if(vt.yeucau_id == this.state.vitriYeuCau){
+        vitri.yeucau = this.state.ListYeuCau
+      }
+    })
+    this.setState({
+      open: false,
+      ListViTri: vitri
+    })
+  }
+
+  handleChangeInputOnCell4 = value => {
+    let yeuCau = this.state.ListYeuCau
+    yeuCau.map(yc => {
+      if(yc.yeucau_id == value._original.yeucau_id){
+        if(value._original.checkYC == 0){
+          yc.checkYC = 1
+        }
+        else{
+          yc.checkYC = 0
+        }
+      }
+    })
+    this.setState({
+      ListYeuCau: yeuCau
+    })
+  }
+
   render() {
     
     return (
@@ -176,21 +221,29 @@ class Manager extends Component {
             <Grid item xs={2}>
               <input type="text" name="ten_chiendich" value = {this.state.ten_chiendich}/>
             </Grid>
-            <Grid item xs={7}></Grid>
+            <Grid item xs={2}></Grid>
            
-            <Grid item xs={1}></Grid>
             <Grid item xs={2}>
               <span style={{ marginRight: "50px" }}>Tên ứng viên:</span>
             </Grid>
             <Grid item xs={2}>
               <input type="text" name="tenungvien" value = {this.state.tenungvien} onChange = {this.handleChangeInputText}/>
             </Grid>
-            <Grid item xs={2}></Grid>
+            <Grid item xs={1}></Grid>
+
+            <Grid item xs={1}></Grid>
             <Grid item xs={2}>
               <span style={{ marginRight: "50px" }}>Email:</span>
             </Grid>
             <Grid item xs={2}>
               <input type="text" name="email" value = {this.state.email} onChange = {this.handleChangeInputText}/>
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={2}>
+              <span style={{ marginRight: "50px" }}>Số điện thoại:</span>
+            </Grid>
+            <Grid item xs={2}>
+              <input type="text" name="sdt" value = {this.state.sdt} onChange = {this.handleChangeInputText}/>
             </Grid>
             <Grid item xs={1}></Grid>
           </Grid>
@@ -221,6 +274,14 @@ class Manager extends Component {
               Header: "Tên",
               accessor: "ten_vitri",
 
+            },
+            {
+              Header: "Yêu cầu",
+              Cell: (props) => 
+              <div style = {{textAlign: "center"}}>
+                <Button  variant="contained" color="secondary" onClick = {() => this.handleChangeInputOnCell2(props.row)}>Chỉnh sửa yêu cầu</Button>
+              </div>
+
             }
           ]}
           defaultPageSize={10}
@@ -238,7 +299,47 @@ class Manager extends Component {
         </Button>
         </div>
         <Divider />
-
+        <Dialog
+          width = "500px"
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+        <DialogTitle id="alert-dialog-title">{"Thông tin chuyển giai đoạn"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          <ReactTable
+          style = {{width: "98%", margin:"10px"}}
+          showPagination={false}
+          sortable={false}
+          data={this.state.ListYeuCau}
+          pageSize={this.state.ListYeuCau.length>0?this.state.ListYeuCau.length:5}
+          columns={[
+            {
+              Header: "",
+              accessor: "checkYC",
+              Cell: (props) => 
+              <div style = {{textAlign: "center"}}>
+                <input type = "checkbox" checked = {props.value > 0} id = {props.row._original.yeucau_id} onClick = {() => this.handleChangeInputOnCell4(props.row)}/>
+              </div>,
+              width: 150
+            },
+            {
+              Header: "Nội dung yêu cầu",
+              accessor: "nd_yeucau",
+              width: 500
+            },
+          ]}
+          />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.saveYeuCau} color="primary" autoFocus>
+            Xong
+          </Button>{' '}
+        </DialogActions>
+      </Dialog>
        
       </div>
 
