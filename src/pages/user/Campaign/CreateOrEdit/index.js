@@ -6,7 +6,7 @@ import "react-table-v6/react-table.css";
 import { getData, saveCampaign, checkSaveCampaign } from './actions';
 import { deleteData } from '../../UngVien/actions';
 import { Save } from '@material-ui/icons/';
-import { Button, Grid, Typography, Divider } from "@material-ui/core/";
+import { Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
@@ -31,7 +31,8 @@ class Manager extends Component {
       tenChienDich: "",
       ListViTri: [],
       idChienDich: "",
-      ListUV: []
+      ListUV: [],
+      open: false
     }
   }
   componentDidMount() {
@@ -91,6 +92,12 @@ class Manager extends Component {
     })
     this.setState({
       ListViTri: viTri
+    })
+  }
+
+  handleChangeInputOnCell2 = value => {
+    this.setState({
+      open: true
     })
   }
 
@@ -195,6 +202,13 @@ class Manager extends Component {
     let path = `/campaign`;
     this.props.history.push({pathname:path});
   }
+
+  handleClose = () => {
+    this.setState({
+      open: false
+    })
+  }
+
   render() {
     
     return (
@@ -259,6 +273,14 @@ class Manager extends Component {
             {
               Header: "Tên",
               accessor: "ten_vitri",
+
+            },
+            {
+              Header: "Yêu cầu",
+              Cell: (props) => 
+              <div style = {{textAlign: "center"}}>
+                <input type = "number" id = {props.row._original.vitri_id} onClick = {() => this.handleChangeInputOnCell2(props.row)}  defaultValue = {props.value}/>
+              </div>
 
             },
             {
@@ -353,6 +375,42 @@ class Manager extends Component {
         </Button>
         </div>
         <Divider />
+        <Dialog
+          width = "500px"
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+        <DialogTitle id="alert-dialog-title">{"Thông tin chuyển giai đoạn"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          <ReactTable
+          style = {{width: "98%", margin:"10px"}}
+          showPagination={false}
+          sortable={false}
+          data={this.state.ListViTri}
+          pageSize={this.state.ListViTri.length>0?this.state.ListViTri.length:5}
+          columns={[
+            {
+              Header: "",
+              accessor: "checkapp",
+              Cell: (props) => 
+              <div style = {{textAlign: "center"}}>
+                <input type = "checkbox" checked = {props.value > 0} id = {props.row._original.vitri_id} onClick = {() => this.handleChangeInputOnCell(props.row)}/>
+              </div>,
+              width: 150
+            },
+          ]}
+          />
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.saveYeuCau} color="primary" autoFocus>
+            Xong
+          </Button>{' '}
+        </DialogActions>
+      </Dialog>
       </div>
 
     );

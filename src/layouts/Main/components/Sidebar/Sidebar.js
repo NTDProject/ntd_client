@@ -69,6 +69,10 @@ const Sidebar = props => {
       href: '/giaidoan',
       icon: <BallotIcon />
     },{
+      title: 'Yêu cầu',
+      href: '/yeucau',
+      icon: <BallotIcon />
+    },{
       title: 'Tạo tài khoản',
       href: '/signup',
       icon: <PersonAddIcon />

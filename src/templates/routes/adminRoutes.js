@@ -60,6 +60,15 @@ const GiaiDoanAdd = Loadable({
   loader: () => import("../../pages/user/GiaiDoan/CreateOrEdit"),
   loading: MyLoadingComponent
 });
+const YeuCau = Loadable({
+  loader: () => import("../../pages/user/YeuCau"),
+  loading: MyLoadingComponent
+});
+
+const YeuCauAdd = Loadable({
+  loader: () => import("../../pages/user/YeuCau/CreateOrEdit"),
+  loading: MyLoadingComponent
+});
 const ViTri = Loadable({
   loader: () => import("../../pages/user/ViTri"),
   loading: MyLoadingComponent
@@ -119,6 +128,18 @@ const routes = {
     path: '/giaidoan',
     exact: true,
     component: GiaiDoan,
+    private: true
+  },
+  YeuCauAdd: {
+    path: '/yeucauadd',
+    exact: true,
+    component: YeuCauAdd,
+    private: true
+  },
+  YeuCau: {
+    path: '/yeucau',
+    exact: true,
+    component: YeuCau,
     private: true
   },
   Cost: {
