@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { getData, getDataCP, deleteData } from './actions';
-import { TextField, Button, Input, InputLabel, Grid, MenuItem, Select } from "@material-ui/core/";
+import { TextField, Button, InputLabel, Grid, Input, MenuItem, Select } from "@material-ui/core/";
 import { Delete, Create, Details } from '@material-ui/icons/';
 import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ReactExport from "react-export-excel";
+
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
-
+import ReactExport from "react-export-excel";
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -190,6 +190,14 @@ class Manager extends Component {
               Header: "Giai đoạn",
               accessor: "ten_giaidoan",
               filterable: true,
+            },
+            {
+              Header: "Trạng thái",
+              accessor: "giaidoan",
+              Cell: (props) =>
+                <div style={{ textAlign: "center" }}>
+                  {props.value == 4?"Pass":props.value == 9?"False":"Process"}
+                </div>
             },
             {
               Header: "Thao tác",

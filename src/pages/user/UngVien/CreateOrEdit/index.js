@@ -40,6 +40,7 @@ class Manager extends Component {
       ngayhen:new Date(),
       giaidoansau_id:"",
       note:"",
+      diem:""
       
     }
   }
@@ -156,7 +157,7 @@ class Manager extends Component {
   }
 
   saveTranfer = () => {
-    const { vitri_id, note, email, ungvien_id, ngayhen, ten_giaidoan, giaidoansau, diadiemhen, chiendich_id, ten_chiendich, giaidoan, giaidoansau_id} = this.state
+    const { vitri_id, note, email, ungvien_id, ngayhen, ten_giaidoan, giaidoansau, diadiemhen, chiendich_id, ten_chiendich, giaidoan, giaidoansau_id, diem} = this.state
 
     if (giaidoansau_id == null || giaidoansau_id == undefined || giaidoansau_id == "") {
       NotificationManager.error('Error', "Không được để trống giai đoạn sau", 3000);
@@ -175,6 +176,7 @@ class Manager extends Component {
         ungvien_id:ungvien_id,
         email: email,
         note: note,
+        diem:diem,
         vitri_id:vitri_id
       }
 
@@ -275,6 +277,11 @@ class Manager extends Component {
               width:"200"
             },
             {
+              Header: "Điểm",
+              accessor: "diem",
+              width:"200"
+            },
+            {
               Header: "Ghi chú",
               accessor: "note",
               width:"200"
@@ -361,7 +368,12 @@ class Manager extends Component {
               <Grid item xs={9}>
                 <input style={{ width:"100%" }} type="text" name="note" value = {this.state.note} onChange = {this.handleChangeInputText}/>
               </Grid>
-             
+              <Grid item xs={3}>
+                <span>Điểm :</span>
+              </Grid>
+              <Grid item xs={9}>
+                <input style={{ width:"100%" }} type="number" name="diem" value = {this.state.diem} onChange = {this.handleChangeInputText}/>
+              </Grid>
             </Grid>
           </DialogContentText>
         </DialogContent>

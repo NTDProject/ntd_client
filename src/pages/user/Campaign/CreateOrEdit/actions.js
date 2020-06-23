@@ -8,6 +8,15 @@ export const getData = (value,after) => {
     }
 }
 
+export const getDataYC = (value,after) => {
+    return {
+        type : Types.GET_DATA_UV_YC,
+        payload: {value,after}
+    }
+}
+
+
+
 export const getDataSuccess = (data) => {
     return {
         type : Types.GET_DATA_CAMPAIGN_DETAIL_SUCCESS,

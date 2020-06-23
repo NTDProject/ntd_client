@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
-import { getData, saveCampaign, checkSaveCampaign } from './actions';
+import { getData, saveCampaign, checkSaveCampaign, getDataYC } from './actions';
 import { deleteData } from '../../UngVien/actions';
 import { Save } from '@material-ui/icons/';
-import { Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core/";
+import { Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Input, MenuItem, Select  } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
@@ -16,6 +16,10 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import 'react-notifications/lib/notifications.css';
 import { Delete, Create, Details } from '@material-ui/icons/';
 import "react-datepicker/dist/react-datepicker.css";
+import ReactExport from "react-export-excel";
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 
 class Manager extends Component {
@@ -34,7 +38,12 @@ class Manager extends Component {
       idChienDich: "",
       ListUV: [],
       open: false,
-      vitriYeuCau: 0
+      vitriYeuCau: 0,
+      vitri_id : 0,
+      ListYeuCauChose:[],
+      yeucau_id: 0,
+      listSearch:[],
+      listDownload:[]
     }
   }
   componentDidMount() {
@@ -49,6 +58,50 @@ class Manager extends Component {
     this.props.getData(value,this.after)
   }
 
+  handleChangeInputText3 = e => {
+
+    let ListVitri = [...(this.state.ListViTri)]
+    let value = e.target.value
+    let listYeuCauChose = ListVitri.filter(vt => vt.vitri_id == value)
+    console.log(listYeuCauChose)
+    this.setState({
+      vitri_id : value,
+      ListYeuCauChose:   listYeuCauChose[0].yeucau.filter(yc => yc.checkYC > 0)
+    });
+
+  };
+
+  handleChangeInputText4 = e => {
+
+    let ListVitri = [...(this.state.ListViTri)]
+    let value = e.target.value
+    ListVitri.map(vt=>{
+      if(vt.vitri_id == this.state.vitri_id){
+        vt.yeucau.map(yc => {
+          if(yc.yeucau_id == value){
+            if(yc.checkYC >0){
+              yc.checkYC = 0
+            }
+            else{
+              yc.checkYC = 1
+            }
+          }
+        })
+      }
+    })
+    this.setState({
+      ListViTri : ListVitri,
+    });
+
+  };
+
+  handleChangeInputText2 = e => {
+    let value = e.target.value
+    this.setState({
+      yeucau_id : value,
+    });
+
+  };
 
   after = (resp) => {
     let ngayBatDau = (resp.ngay_batdau.split("-"))
@@ -62,7 +115,8 @@ class Manager extends Component {
       giaidoanhientai_id: resp.giaidoanhientai_id,
       giaidoansau_id: resp.giaidoansau_id,
       ListViTri: resp.ListViTri,
-      ListUV: resp.ListUV
+      ListUV: resp.ListUV,
+      listDownload:resp.ListUV
     })
     console.log(resp)
   }
@@ -260,8 +314,51 @@ class Manager extends Component {
     })
   }
 
+  search = () => {
+    let YeuCauSearch = []
+    var inputs = document.getElementsByClassName('yeucau');
+    for(var i = 0, l = inputs.length; i < l; ++i) {
+      if(inputs[i].checked) {
+        YeuCauSearch.push(inputs[i].id)
+
+      }
+    }
+
+    this.props.getDataYC({chiendich_id: this.state.idChienDich, vitri_id: this.state.vitri_id, yeucau: YeuCauSearch}, this.afterSearch)
+  }
+
+  afterSearch = (resp) => {
+    this.setState({
+      ListUV: resp,
+      listDownload:resp
+    })
+  }
+
+  handleFilterChange = () => {
+    const listDownload = this.selectTable.getResolvedState().sortedData;
+    this.setState({
+      listDownload:listDownload
+    })
+  }
+
   render() {
+    const ListOptionVT = this.state.ListViTri.map(v => {
+      return(
+      <MenuItem value={v.vitri_id} key = {v.vitri_id}>{v.ten_vitri} </MenuItem>
+      )
+    })
+
+    const ListOptionYC = this.state.ListYeuCauChose.map(y => {
+      return(
+        <div style = {{paddingTop:"15px"}}>
+        <input type = "checkbox"  id = {y.yeucau_id} className = "yeucau"/>
+        <label>{y.nd_yeucau} </label>
+        </div>
+      )
+    })
+
     
+
     return (
 
       <div style={{ margin: "20px" }}>
@@ -354,9 +451,43 @@ class Manager extends Component {
         </div>
         <Divider />
         <div style={{ padding: "20px" }}>
-          <Typography variant="subtitle1" gutterBottom>
+        <Typography variant="subtitle1" gutterBottom>
             Danh sách ứng viên :
           </Typography>
+        <Grid container spacing={3} >
+          <Grid item xs={4}>
+          <Select
+            style = {{width: "500px"}}
+            value={this.state.chienDichId}
+            input={<Input />}
+            onChange={this.handleChangeInputText3}
+          >
+            {
+                  ListOptionVT
+            }
+          </Select>
+          </Grid>
+          <Grid item xs={1}></Grid>
+          <Grid item xs={4}>
+          {
+                  ListOptionYC
+            }
+          </Grid>
+
+          <Grid item xs={3}></Grid>
+          </Grid>
+          <div style= {{paddingTop:"20px", paddingBottom:"20px"}}>
+          <Button  variant="contained" color="secondary" onClick = {() => this.search()}>Tra cứu</Button>{' '}
+          <ExcelFile element={<Button variant="contained" color="secondary">Download</Button>}>
+                <ExcelSheet data={this.state.listDownload} name={"Ứng viên - " + this.state.ten_chiendich}>
+                    <ExcelColumn label="Tên ứng viên" value="tenungvien"/>
+                    <ExcelColumn label="Email" value="email"/>
+                </ExcelSheet>
+            </ExcelFile>
+          </div>
+
+        
+          
           <Grid container spacing={3}>
           <ReactTable
           ref={(r) => {this.selectTable = r;}}
@@ -396,6 +527,15 @@ class Manager extends Component {
               Header: "Giai đoạn",
               accessor: "ten_giaidoan",
               filterable: true,
+            },
+            {
+              Header: "Trạng thái",
+              accessor: "giaidoan",
+              filterable: true,
+              Cell: (props) =>
+                <div style={{ textAlign: "center" }}>
+                  {props.value == 4?"Pass":props.value == 9?"False":"Process"}
+                </div>
             },
             {
               Header: "Thao tác",
@@ -481,6 +621,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getData: (value, after) => { dispatch(getData(value, after)) },
+    getDataYC: (value, after) => { dispatch(getDataYC(value, after)) },
     save: (value, after) => { dispatch(saveCampaign(value, after)) },
     checksave: (value, after) => { dispatch(checkSaveCampaign(value, after)) },
     deleteData: (value, after) => { dispatch(deleteData(value, after)) },
