@@ -193,11 +193,8 @@ class Manager extends Component {
             },
             {
               Header: "Trạng thái",
-              accessor: "giaidoan",
-              Cell: (props) =>
-                <div style={{ textAlign: "center" }}>
-                  {props.value == 4?"Pass":props.value == 9?"False":"Process"}
-                </div>
+              accessor: "trangthai",
+              filterable: true,
             },
             {
               Header: "Thao tác",
