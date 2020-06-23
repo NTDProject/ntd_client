@@ -457,7 +457,7 @@ class Manager extends Component {
         <Grid container spacing={3} >
           <Grid item xs={4}>
           <Select
-            style = {{width: "500px"}}
+            style = {{width: "300px"}}
             value={this.state.chienDichId}
             input={<Input />}
             onChange={this.handleChangeInputText3}
@@ -530,12 +530,8 @@ class Manager extends Component {
             },
             {
               Header: "Trạng thái",
-              accessor: "giaidoan",
+              accessor: "trangthai",
               filterable: true,
-              Cell: (props) =>
-                <div style={{ textAlign: "center" }}>
-                  {props.value == 4?"Pass":props.value == 9?"False":"Process"}
-                </div>
             },
             {
               Header: "Thao tác",

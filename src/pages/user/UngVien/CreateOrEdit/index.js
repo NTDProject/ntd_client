@@ -40,8 +40,8 @@ class Manager extends Component {
       ngayhen:new Date(),
       giaidoansau_id:"",
       note:"",
-      diem:""
-      
+      diem:"",
+      ListYeuCau:[] 
     }
   }
   componentDidMount() {
@@ -102,7 +102,7 @@ class Manager extends Component {
   
 
   save = () => {
-    const {ungvien_id, tenungvien, email} = this.state
+    const {ungvien_id, tenungvien, email, ListYeuCau, vitri_id, chiendich_id} = this.state
 
     if(tenungvien == null || tenungvien == undefined || tenungvien == ''){
       NotificationManager.error('Error', "Không được để trống Tên ứng viên", 3000);
@@ -114,8 +114,11 @@ class Manager extends Component {
     else{
       let value = {
         ungvien_id:ungvien_id,
+        vitri_id:vitri_id,
+        chiendich_id:chiendich_id,
         ten_ungvien:tenungvien,
         email:email,
+        yc: ListYeuCau
       }
       this.props.save(value,this.afterSave)
     }
@@ -131,9 +134,25 @@ class Manager extends Component {
   }
 
   afterHistory = (resp) => {
-    const result = resp.filter(r => r.status == 1);
+    const result = resp.ls.filter(r => r.status == 1);
     this.setState({
-      listHistory: resp,
+      ListYeuCau:resp.yc,
+      listHistory: resp.ls,
+      giaidoan: result[0].giaidoan,
+      ten_giaidoan: result[0].ten_giaidoan,
+      open: false,
+      note:"",
+      diadiemhen:"",
+      ngayhen:new Date(),
+      giaidoansau_id:"",
+      giaidoansau:""
+    })
+  }
+
+  afterHistory2 = (resp) => {
+    const result = resp.ls.filter(r => r.status == 1);
+    this.setState({
+      listHistory: resp.ls,
       giaidoan: result[0].giaidoan,
       ten_giaidoan: result[0].ten_giaidoan,
       open: false,
@@ -191,7 +210,7 @@ class Manager extends Component {
     if(resp.status){
       NotificationManager.success('Success', resp.message, 3000);
       this.props.getDataGiaiDoan({giaidoan:giaidoansau_id},this.afterGetDataGiaiDoan)
-      this.props.getHistory({chienDichID : chiendich_id, ungVienID: ungvien_id, viTriID: vitri_id },this.afterHistory)
+      this.props.getHistory({chienDichID : chiendich_id, ungVienID: ungvien_id, viTriID: vitri_id },this.afterHistory2)
     }
     else
       NotificationManager.error('Error', resp.message, 3000);
@@ -202,6 +221,22 @@ class Manager extends Component {
     this.props.history.push({pathname:path});
   }
 
+  handleChangeInputOnCell4 = value => {
+    let yeuCau = this.state.ListYeuCau
+    yeuCau.map(yc => {
+      if(yc.yeucau_id == value._original.yeucau_id){
+        if(value._original.checkYC == 0){
+          yc.checkYC = 1
+        }
+        else{
+          yc.checkYC = 0
+        }
+      }
+    })
+    this.setState({
+      ListYeuCau: yeuCau
+    })
+  }
 
   render() {
     const ListGiaiDoan = this.state.ListGiaiDoan.map(c => {
@@ -253,7 +288,34 @@ class Manager extends Component {
             <Grid item xs={3}></Grid>
           </Grid>
         </div>
+
+        <ReactTable
+          style = {{width: "98%", margin:"10px"}}
+          showPagination={false}
+          sortable={false}
+          data={this.state.ListYeuCau}
+          pageSize={this.state.ListYeuCau.length>0?this.state.ListYeuCau.length:5}
+          columns={[
+            {
+              Header: "",
+              accessor: "checkYC",
+              Cell: (props) => 
+              <div style = {{textAlign: "center"}}>
+                <input type = "checkbox" checked = {props.value > 0} id = {props.row._original.yeucau_id} onClick = {() => this.handleChangeInputOnCell4(props.row)}/>
+              </div>,
+              width: 150
+            },
+            {
+              Header: "Nội dung yêu cầu",
+              accessor: "nd_yeucau",
+              width: 500
+            },
+          ]}
+          />
+
         <Divider />
+
+        
         <div style={{ padding: "20px" }}>
           <Typography variant="subtitle1" gutterBottom>
             Nhật ký giai đoạn:
