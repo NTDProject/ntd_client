@@ -27,12 +27,12 @@ const Footer = props => {
           href="#"
           target="_blank"
         >
-          Footer
+          
         </Link>
-        . 2019
+        Sản phẩm thuộc về Nguyệt - Đồ án tốt nghiệp 2020
       </Typography>
       <Typography variant="caption">
-      Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua
+        
       </Typography>
     </div>
   );

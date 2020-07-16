@@ -41,7 +41,9 @@ class Manager extends Component {
       giaidoansau_id:"",
       note:"",
       diem:"",
-      ListYeuCau:[] 
+      ListYeuCau:[],
+      viTriMax:{},
+      open2: false
     }
   }
   componentDidMount() {
@@ -134,8 +136,10 @@ class Manager extends Component {
   }
 
   afterHistory = (resp) => {
+    console.log(resp)
     const result = resp.ls.filter(r => r.status == 1);
     this.setState({
+      viTriMax: resp.viTriMax,
       ListYeuCau:resp.yc,
       listHistory: resp.ls,
       giaidoan: result[0].giaidoan,
@@ -153,9 +157,11 @@ class Manager extends Component {
     const result = resp.ls.filter(r => r.status == 1);
     this.setState({
       listHistory: resp.ls,
+      viTriMax: resp.viTriMax,
       giaidoan: result[0].giaidoan,
       ten_giaidoan: result[0].ten_giaidoan,
       open: false,
+      open2:false,
       note:"",
       diadiemhen:"",
       ngayhen:new Date(),
@@ -173,6 +179,21 @@ class Manager extends Component {
     this.setState({
       open: true
     })
+  }
+
+  checkSaveTranfer = () => {
+    
+    const { viTriMax, vitri_id, note, email, ungvien_id, ngayhen, ten_giaidoan, giaidoansau, diadiemhen, chiendich_id, ten_chiendich, giaidoan, giaidoansau_id, diem} = this.state
+    console.log("check", viTriMax)
+    if (giaidoansau_id == 4 && viTriMax.dem >= viTriMax.soluong) {
+      this.setState({
+        open: false,
+        open2: true
+      })
+    }
+    else{
+      this.saveTranfer()
+    }
   }
 
   saveTranfer = () => {
@@ -440,12 +461,39 @@ class Manager extends Component {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.saveTranfer} color="primary" autoFocus>
+          <Button onClick={this.checkSaveTranfer} color="primary" autoFocus>
             Lưu
           </Button>{' '}
           <Button onClick={this.handleClose} color="primary" autoFocus>
             Quay lại
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+          width = "500px"
+          open={this.state.open2}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+      <DialogTitle id="alert-dialog-title">{"Xác nhận thêm mới"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <span>Vị trí </span> 
+            {
+                this.state.viTriMax.ten_vitri
+            }
+            <span> đã tuyển đủ số lượng bạn có muốn tiếp tục ?</span>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.saveTranfer} color="primary">
+            Tiếp tục
+          </Button>{' '}
+          <Button onClick={() => this.setState({open: true, open2: false})} color="primary">
+            Quay lại
+          </Button>{' '}
         </DialogActions>
       </Dialog>
       </div>

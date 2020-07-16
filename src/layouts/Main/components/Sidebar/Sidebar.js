@@ -42,46 +42,56 @@ const Sidebar = props => {
 
   const classes = useStyles();
 
-  const pages = [
-    {
-      title: 'Trang chủ',
-      href: '/',
-      icon: <DashboardIcon />
-    },
-    {
-      title: 'Chiến dịch',
-      href: '/campaign',
-      icon: <PeopleIcon />
-    },{
-      title: 'Ứng viên',
-      href: '/UngVien',
-      icon: <PeopleIcon />
-    },{
-      title: 'Chi phí',
-      href: '/cost',
-      icon: <AttachMoneyIcon />
-    },{
-      title: 'Vị trí',
-      href: '/vitri',
-      icon: <AccountTreeIcon />
-    },{
-      title: 'Giai đoạn',
-      href: '/giaidoan',
-      icon: <BallotIcon />
-    },{
-      title: 'Yêu cầu',
-      href: '/yeucau',
-      icon: <BallotIcon />
-    },{
-      title: 'Tạo tài khoản',
-      href: '/signup',
-      icon: <PersonAddIcon />
-    },{
-      title: 'Đổi mật khẩu',
-      href: '/changepass',
-      icon: <VpnKeyIcon />
-    }
-  ];
+   const pages = [{
+    title: 'Trang chủ',
+    href: '/',
+  }].concat(JSON.parse(localStorage.getItem("session")).token.path)
+
+  //  console.log(pages)
+  //  [
+  //   {
+  //     title: 'Trang chủ',
+  //     href: '/',
+  //     icon: <DashboardIcon />
+  //   },
+  //   {
+  //     title: 'Chiến dịch',
+  //     href: '/campaign',
+  //     icon: <PeopleIcon />
+  //   },{
+  //     title: 'Ứng viên',
+  //     href: '/UngVien',
+  //     icon: <PeopleIcon />
+  //   },{
+  //     title: 'Nhóm quyền',
+  //     href: '/Group',
+  //     icon: <PeopleIcon />
+  //   },{
+  //     title: 'Chi phí',
+  //     href: '/cost',
+  //     icon: <AttachMoneyIcon />
+  //   },{
+  //     title: 'Vị trí',
+  //     href: '/vitri',
+  //     icon: <AccountTreeIcon />
+  //   },{
+  //     title: 'Giai đoạn',
+  //     href: '/giaidoan',
+  //     icon: <BallotIcon />
+  //   },{
+  //     title: 'Yêu cầu',
+  //     href: '/yeucau',
+  //     icon: <BallotIcon />
+  //   },{
+  //     title: 'Tạo tài khoản',
+  //     href: '/signup',
+  //     icon: <PersonAddIcon />
+  //   },{
+  //     title: 'Đổi mật khẩu',
+  //     href: '/changepass',
+  //     icon: <VpnKeyIcon />
+  //   }
+  // ];
 
   return (
     <Drawer

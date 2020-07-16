@@ -31,6 +31,16 @@ const UngVien = Loadable({
   loading: MyLoadingComponent
 });
 
+const Group = Loadable({
+  loader: () => import("../../pages/admin/Group"),
+  loading: MyLoadingComponent
+});
+
+const GroupCreateOrEdit= Loadable({
+  loader: () => import("../../pages/admin/Group/CreateOrEdit"),
+  loading: MyLoadingComponent
+});
+
 const Analysis = Loadable({
   loader: () => import("../../pages/admin/HomePage"),
   loading: MyLoadingComponent
@@ -173,7 +183,18 @@ const routes = {
     component: CampaignCreateOrEdit,
     private: true
   },
-  
+  Group:{
+    path: '/Group',
+    exact: true,
+    component: Group,
+    private: true
+  },
+  GroupCreateOrEdit:{
+    path: '/Group/CreateOrEdit',
+    exact: true,
+    component: GroupCreateOrEdit,
+    private: true
+  },
   UngVien: {
     path: '/UngVien',
     exact: true,

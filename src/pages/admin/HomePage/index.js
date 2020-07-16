@@ -27,7 +27,8 @@ class Homepage extends Component {
           Pass: 0,
           passPerSum: 0,
           process: 0,
-          false: 0
+          false: 0,
+          sumCost:0
         }
       }
       componentDidMount() {
@@ -47,7 +48,8 @@ class Homepage extends Component {
           passPerSum: resp.pass / resp.sumUngVien *100,
           listVT: resp.listVT,
           listVTTT:resp.listVTTT,
-          listVTNC:resp.listVTNC
+          listVTNC:resp.listVTNC,
+          sumCost:resp.chiphi
         })
     
       }
@@ -103,7 +105,7 @@ class Homepage extends Component {
                         xl={3}
                         xs={12}
                     >
-                        <TotalProfit value = "2000000"/>
+                        <TotalProfit value = {this.state.sumCost}/>
                     </Grid>
                     <Grid
                         item

@@ -10,7 +10,10 @@ import {
   TextField,
   Typography,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Select,
+  Input,
+  MenuItem
 } from '@material-ui/core';
 import {CheckBoxOutlineBlank, CheckBox } from '@material-ui/icons';
 import { useSelector } from 'react-redux';
@@ -154,16 +157,21 @@ const SignUp = props => {
       description:'',
       city:1
     },
+    ListGroup:[],
     touched: {},
     errors: {}
   });
 
-  useEffect(() => {
+  useEffect(async () => {
     const errors = validate(formState.values, schema);
+    
+    const result = await callApiUnAuth(`group/`, 'GET', {})
+    console.log(result)
     setFormState(formState => ({
       ...formState,
       isValid: errors ? false : true,
-      errors: errors || {}
+      errors: errors || {},
+      ListGroup: result
     }));
   }, [formState.values]);
 
@@ -192,7 +200,6 @@ const SignUp = props => {
       isValid:false
     }))
     const result = await callApiUnAuth(`user/`, 'POST', formState.values)
-    console.log(result);
     if (result.data.errors) {
       result.data.errors.forEach(e => {
         NotificationManager.error('Error', e.msg, 3000);
@@ -238,6 +245,11 @@ const SignUp = props => {
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
+  const ListCampaign = formState.ListGroup.map(g => {
+      return(
+      <MenuItem value={g.group_id} key = {g.group_id}>{g.group_name} </MenuItem>
+      )
+    })
   return (
     <div className={classes.root}>
       <NotificationContainer />
@@ -336,8 +348,15 @@ const SignUp = props => {
                       value={formState.values.email || ''}
                       variant="outlined"
                     />
-                   
-
+                    <Select
+                      style = {{width: "100%"}}
+                      input={<Input />}
+                    >
+                      {
+                            ListCampaign
+                      }
+                    </Select>
+                    
                     <Button
                       className={classes.signInButton}
                       color="primary"
@@ -361,5 +380,7 @@ const SignUp = props => {
 SignUp.propTypes = {
   history: PropTypes.object
 };
+
+
 
 export default withRouter(SignUp);

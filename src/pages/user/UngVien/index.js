@@ -129,7 +129,8 @@ class Manager extends Component {
           Ứng viên
         </div>
 
-        <div style={{ padding: "20px 10px 20px 10px", fontWeight: "bold" }}><Select
+        <div style={{ padding: "20px 10px 20px 10px", fontWeight: "bold" }}>
+          <Select
             style = {{width: "500px"}}
             value={this.state.chienDichId}
             input={<Input />}

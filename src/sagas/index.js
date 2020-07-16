@@ -1,5 +1,7 @@
 // import SigupSaga from '../pages/admin/SignUp/sagas';
 import CampaignSaga from '../pages/user/Campaign/sagas';
+import GroupSaga from '../pages/admin/Group/sagas';
+import GroupDetailSaga from '../pages/admin/Group/CreateOrEdit/sagas';
 import CampaignDetailSaga from '../pages/user/Campaign/CreateOrEdit/sagas';
 import CampaignTranferSaga from '../pages/user/Campaign/Tranfer/sagas';
 import CampaignUngVienSaga from '../pages/user/UngVien/sagas';
@@ -16,6 +18,7 @@ import ViTriAdd from '../pages/user/ViTri/CreateOrEdit/sagas';
 import YeuCauAdd from '../pages/user/YeuCau/CreateOrEdit/sagas';
 import GiaiDoanAdd from '../pages/user/GiaiDoan/CreateOrEdit/sagas';
 import Acc from '../pages/admin/Account/sagas';
+import SignUp from '../pages/admin/Signup/sagas';
 import { fork } from 'redux-saga/effects';
 
 
@@ -38,4 +41,7 @@ export default function* IndexSaga () {
   yield fork(ViTriAdd);
   yield fork(Acc);
   yield fork(UngVienCreateSaga);
+  yield fork(GroupSaga);
+  yield fork(GroupDetailSaga);
+  yield fork(SignUp)
 }

@@ -31,7 +31,9 @@ class Manager extends Component {
       chiendich_id: "",
       ungvien_id: "",
       open: false,
-      ListYeuCau: []
+      open2: false,
+      ListYeuCau: [],
+      viTriMax:[]
     }
   }
   componentDidMount() {
@@ -100,6 +102,41 @@ class Manager extends Component {
     this.setState({
       ListViTri: viTri
     })
+  }
+
+  checksave = () => {
+    const {ten_chiendich, tenungvien, email,sdt} = this.state
+    let canTuyen = 0
+    let viTriMax = []
+    this.state.ListViTri.map(vt => {
+      if(vt.checkapp != null && vt.checkapp != undefined && vt.checkapp != ''&& vt.checkapp > 0){
+        canTuyen += vt.checkapp;
+        if(vt.soluong <= vt.dem){
+          viTriMax.push(vt.ten_vitri)
+        }
+      }
+    })
+
+    if(tenungvien == null || tenungvien == undefined || tenungvien == ''){
+      NotificationManager.error('Error', "Không được để trống tên ứng viên", 3000);
+    }
+    else if(email == null || email == undefined || email == ''){
+      NotificationManager.error('Error', "Không được để trống email", 3000);
+    }
+    else if(sdt == null || sdt == undefined || sdt == ''){
+      NotificationManager.error('Error', "Không được để trống số điện thoại", 3000);
+    }
+    else if(canTuyen <= 0){
+      NotificationManager.error('Error',"Bạn phải chọn ít nhất 1 vị trí ứng tuyển", 3000);
+    }else if(viTriMax.length > 0){
+      this.setState({
+        open2: true,
+        viTriMax: viTriMax
+      })
+    }
+    else{
+      this.save()
+    }
   }
 
   save = () => {
@@ -291,7 +328,7 @@ class Manager extends Component {
         </div>
         <Divider />
         <div style ={{textAlign: "center", margin: "20px"}}>
-        <Button variant="contained" color="secondary" onClick = {this.save}>
+        <Button variant="contained" color="secondary" onClick = {this.checksave}>
           <Save/>{' '}Lưu
         </Button> {' '}
         <Button variant="contained" color="secondary" onClick = {this.back}>
@@ -306,7 +343,7 @@ class Manager extends Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-        <DialogTitle id="alert-dialog-title">{"Thông tin chuyển giai đoạn"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Thông tin yêu cầu"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
           <ReactTable
@@ -341,6 +378,44 @@ class Manager extends Component {
         </DialogActions>
       </Dialog>
        
+
+      <Dialog
+          width = "500px"
+          open={this.state.open2}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+      <DialogTitle id="alert-dialog-title">{"Xác nhận thêm mới"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <span>Vị trí </span> 
+            {
+              this.state.viTriMax.map((a,i) => {
+                if(i == 0){
+                return(
+                  a
+                )
+                }
+                else{
+                  return(
+                    ", " +a
+                  )
+                }
+              })
+            }
+            <span> đã tuyển đủ số lượng bạn có muốn tiếp tục ?</span>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={this.save} color="primary">
+            Tiếp tục
+          </Button>{' '}
+          <Button onClick={() => this.setState({open2: false})} color="primary">
+            Quay lại
+          </Button>{' '}
+        </DialogActions>
+      </Dialog>
       </div>
 
     );
