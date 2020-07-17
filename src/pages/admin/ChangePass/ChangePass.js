@@ -5,6 +5,7 @@ import validate from 'validate.js';
 import { makeStyles } from '@material-ui/styles';
 import { Link } from 'react-router-dom'
 import {
+  Divider,
   Grid,
   Button,
   TextField,
@@ -229,31 +230,19 @@ const SignUp = props => {
     formState.touched[field] && formState.errors[field] ? true : false;
 
   return (
-    <div className={classes.root}>
+    <div style={{ margin: "20px" }}>
       <NotificationContainer />
-          <Grid
-            container
-          >
-            
-            <Grid
-              item
-              lg={7}
-              xs={12}
-            >
               <div >
                 <div>
                   <form
-                    className={classes.form}
                     onSubmit={handleSignUp}
                   >
-                    <Typography
-                      className={classes.title}
-                      variant="h2"
-                    >
-                      Đổi mật khẩu
-                </Typography>
+                    <div style={{ padding: "20px 10px 20px 10px", fontWeight: "bold" }}>
+                      Chiến dịch tuyển dụng
+                    </div>
+                    <Grid container spacing={3}>
+                    <Grid item xs={5}>
                   <TextField
-                      className={classes.textField}
                       error={hasError('username')}
                       fullWidth
                       disabled={true}
@@ -267,8 +256,10 @@ const SignUp = props => {
                       value={formState.values.username}
                       variant="outlined"
                     />  
+                    </Grid>
+                    <Grid item xs={7}></Grid>
+                    <Grid item xs={5}>
                     <TextField
-                      className={classes.textField}
                       error={hasError('pass')}
                       fullWidth
                       helperText={
@@ -281,8 +272,10 @@ const SignUp = props => {
                       value={formState.values.pass || ''}
                       variant="outlined"
                     />
+                    </Grid>
+                    <Grid item xs={7}></Grid>
+                    <Grid item xs={5}>
                     <TextField
-                      className={classes.textField}
                       error={hasError('newpass')}
                       fullWidth
                       helperText={
@@ -295,8 +288,10 @@ const SignUp = props => {
                       value={formState.values.newpass || ''}
                       variant="outlined"
                     />
+                    </Grid>
+                    <Grid item xs={7}></Grid>
+                    <Grid item xs={5}>
                     <TextField
-                      className={classes.textField}
                       error={hasError('renewpass')}
                       fullWidth
                       helperText={
@@ -309,24 +304,19 @@ const SignUp = props => {
                       value={formState.values.renewpass || ''}
                       variant="outlined"
                     />
-                   
-                    <Button
-                      className={classes.signInButton}
-                      color="primary"
-                      fullWidth
-                      size="large"
-                      type="submit"
-                      variant="contained"
-                      
-                    >
-                      Đổi mật khẩu
-                </Button>
-                   
+                    </Grid>
+                    <Grid item xs={7}></Grid>
+                    </Grid>
+
+                    <div style ={{textAlign: "center", margin: "20px"}}>
+                        <Button variant="contained" color="secondary" type="submit">
+                          Đổi mật khẩu
+                        </Button>{' '}
+                    </div>
+                  <Divider />
                   </form>
                 </div>
               </div>
-            </Grid>
-          </Grid>
     </div>
   );
 };
