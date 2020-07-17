@@ -5,12 +5,17 @@ import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { getData, save } from './actions';
 import { Save } from '@material-ui/icons/';
-import { Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText,DialogTitle } from "@material-ui/core/";
+import { TextField, Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText,DialogTitle } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { withRouter } from 'react-router-dom';
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from "@material-ui/pickers";
 
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -128,49 +133,76 @@ class Manager extends Component {
       </Typography>
           <Grid container spacing={3}>
             <Grid item xs={1}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Tên chiến dịch:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <input type="text" name="ten_chiendich" value = {this.state.ten_chiendich} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                label="Tên chiến dịch"
+                name="ten_chiendich"
+                onChange={this.handleChangeInputText}
+                type="text"
+                value={this.state.ten_chiendich}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={7}></Grid>
            
             <Grid item xs={1}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Nội dung:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <input type="text" name="noidung" value = {this.state.noidung} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                label="Nội dung"
+                name="noidung"
+                onChange={this.handleChangeInputText}
+                type="text"
+                value={this.state.noidung}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={2}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Ghi chú:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <input type="text" name="note" value = {this.state.note} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                label="Ghi chú"
+                name="note"
+                onChange={this.handleChangeInputText}
+                type="text"
+                value={this.state.note}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={1}></Grid>
 
             <Grid item xs={1}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Số tiền:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <input type="text" name="sotien" value = {this.state.sotien} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={4}>
+            <TextField
+                fullWidth
+                label="Số tiền"
+                name="sotien"
+                onChange={this.handleChangeInputText}
+                type="number"
+                value={this.state.sotien}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={2}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Ngày phát sinh:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <DatePicker
-                  id = "create"
-                  name="create"
-                  selected={this.state.create}
-                  onChange={this.handleChangeNgayKetThuc}
-                  dateFormat="dd/MM/yyyy"
-                />
+            <Grid item xs={4}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                fullWidth
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="create"
+                label="Ngày phát sinh"
+                name="create"
+                value={this.state.create}
+                onChange={this.handleChangeNgayKetThuc}
+                KeyboardButtonProps={{
+                  "aria-label": "change date"
+                }}
+              />
+          </MuiPickersUtilsProvider>
             </Grid>
             <Grid item xs={1}></Grid>
           </Grid>

@@ -46,7 +46,6 @@ const schema = {
 
 const useStyles = makeStyles(theme => ({
   root: {
-    backgroundColor: theme.palette.background.default,
     height: '100%'
   },
   grid: {
@@ -58,12 +57,11 @@ const useStyles = makeStyles(theme => ({
     }
   },
   quote: {
-    backgroundColor: theme.palette.neutral,
     height: '100%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundImage: 'url(/images/auth.jpg)',
+    backgroundImage: 'url(/images/change_pass.png)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'
@@ -234,47 +232,16 @@ const SignUp = props => {
     <div className={classes.root}>
       <NotificationContainer />
           <Grid
-            className={classes.grid}
             container
           >
+            
             <Grid
-              className={classes.quoteContainer}
-              item
-              lg={5}
-            >
-              <div className={classes.quote}>
-                <div className={classes.quoteInner}>
-                  <Typography
-                    className={classes.quoteText}
-                    variant="h1"
-                  >
-                    Đổi mật khẩu.
-              </Typography>
-                  <div className={classes.person}>
-                    <Typography
-                      className={classes.name}
-                      variant="body1"
-                    >
-                      Nên đổi mật khẩu thường xuyên để đảm bảo an toàn bảo mật
-                </Typography>
-                    <Typography
-                      className={classes.bio}
-                      variant="body2"
-                    >
-                      
-                </Typography>
-                  </div>
-                </div>
-              </div>
-            </Grid>
-            <Grid
-              className={classes.content}
               item
               lg={7}
               xs={12}
             >
-              <div className={classes.content}>
-                <div className={classes.contentBody}>
+              <div >
+                <div>
                   <form
                     className={classes.form}
                     onSubmit={handleSignUp}

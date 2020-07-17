@@ -5,7 +5,7 @@ import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { save } from './actions';
 import { Save } from '@material-ui/icons/';
-import { Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText,DialogTitle } from "@material-ui/core/";
+import { TextField, Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText,DialogTitle } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
@@ -98,18 +98,28 @@ class Manager extends Component {
           <Grid container spacing={3}>
            
             <Grid item xs={1}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Tên vị trí:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <input type="text" name="ten_vitri" value = {this.state.ten_vitri} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                label="Tên vị trí"
+                name="ten_vitri"
+                onChange={this.handleChangeInputText}
+                type="text"
+                value={this.state.ten_vitri}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={2}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Ghi chú:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <input type="text" name="mota" value = {this.state.mota} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                label="Ghi chú"
+                name="mota"
+                onChange={this.handleChangeInputText}
+                type="text"
+                value={this.state.mota}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={1}></Grid>
 

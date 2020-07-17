@@ -5,7 +5,7 @@ import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { getData, save, getHistory, getDataGiaiDoan, tranfer } from './actions';
 import { Save } from '@material-ui/icons/';
-import { Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, Input, MenuItem } from "@material-ui/core/";
+import { TextField, Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, Input, MenuItem } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,7 +13,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { withRouter } from 'react-router-dom';
 import 'react-notifications/lib/notifications.css';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from "@material-ui/pickers";
 
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -265,6 +269,8 @@ class Manager extends Component {
       <MenuItem value={c.GiaiDoan} key = {c.GiaiDoan}>{c.Ten_GiaiDoan} </MenuItem>
       )
     })
+
+    const Diem = () => {}
     return (
 
       <div style={{ margin: "20px" }}>
@@ -275,36 +281,55 @@ class Manager extends Component {
       </Typography>
           <Grid container spacing={3}>
             <Grid item xs={1}></Grid>
-            <Grid item xs={3}>
-              <span style={{ marginRight: "50px" }}>Tên chiến dịch:</span>
-            </Grid>
-            <Grid item xs={5}>
-              <input style = {{width:"100%"}} type="text" name="ten_chiendich" value = {this.state.ten_chiendich} />
+            <Grid item xs={8}>
+              <TextField
+                fullWidth
+                label="Tên chiến dịch"
+                name="ten_chiendich"
+                type="text"
+                value={this.state.ten_chiendich}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={3}></Grid>
            
             <Grid item xs={1}></Grid>
-            <Grid item xs={3}>
-              <span style={{ marginRight: "50px" }}>Tên ứng viên:</span>
-            </Grid>
-            <Grid item xs={5}>
-              <input style = {{width:"100%"}} type="text" name="tenungvien" value = {this.state.tenungvien} onChange = {this.handleChangeInputText}/>
-            </Grid>
-            <Grid item xs={3}></Grid>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={3}>
-              <span style={{ marginRight: "50px" }}>Email:</span>
-            </Grid>
-            <Grid item xs={5}>
-              <input style = {{width:"100%"}} type="text" name="email" value = {this.state.email} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={8}>
+              <TextField
+                fullWidth
+                label="Tên ứng viên"
+                name="tenungvien"
+                onChange={this.handleChangeInputText}
+                type="text"
+                value={this.state.tenungvien}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={3}></Grid>
             <Grid item xs={1}></Grid>
-            <Grid item xs={3}>
-              <span style={{ marginRight: "50px" }}>Vị trí:</span>
+            <Grid item xs={8}>
+              <TextField
+                fullWidth
+                label="Email"
+                name="email"
+                onChange={this.handleChangeInputText}
+                type="text"
+                value={this.state.email}
+                variant="outlined"
+              />
             </Grid>
-            <Grid item xs={5}>
-              <input style = {{width:"100%"}} type="text" name="ten_vitri" value = {this.state.ten_vitri}/>
+            <Grid item xs={3}></Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={8}>
+              <TextField
+                fullWidth
+                label="Vị trí"
+                name="ten_vitri"
+                onChange={this.handleChangeInputText}
+                type="text"
+                value={this.state.ten_vitri}
+                variant="outlined"
+              />
             </Grid>
             <Grid item xs={3}></Grid>
           </Grid>
@@ -401,62 +426,94 @@ class Manager extends Component {
           <DialogContentText id="alert-dialog-description">
             <Grid container spacing={3}>
               
-              <Grid item xs={3}>
-                <span>Giai đoạn hiện tại:</span>
-              </Grid>
-              <Grid item xs={9}>
-                <input style={{ width:"100%" }} type="text" name="ten_giaidoan" value = {this.state.ten_giaidoan} />
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Giai đoạn hiện tại"
+                  name="ten_giaidoan"
+                  onChange={this.handleChangeInputText}
+                  type="text"
+                  value={this.state.ten_giaidoan}
+                  variant="outlined"
+                />
               </Grid>
               
-              <Grid item xs={3}>
-                <span>Gian đoạn sau:</span>
-              </Grid>
-              <Grid item xs={9}>
-              <Select
-                name = "giaidoansau_id"
-                value={this.state.giaidoansau_id}
-                input={<Input style={{ width:"100%" }}/>}
-                onChange={this.handleChangeInputText}
-              >
-                {
+              <Grid item xs={12}>
+                <TextField
+                    fullWidth
+                    id="ogiaidoansau_id"
+                    name="giaidoansau_id"
+                    select
+                    label="Giai đoạn sau"
+                    value={this.state.giaidoansau_id}
+                    onChange={this.handleChangeInputText}
+                    variant="outlined"
+                  >
+                    {
                       ListGiaiDoan
-                }
-            </Select>{' '}
+                    }
+                  </TextField>
               </Grid>
           
               
-              <Grid item xs={3}>
-                <span>Ngày hẹn:</span>
+              <Grid item xs={12}>
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                fullWidth
+                disableToolbar
+                variant="inline"
+                inputVariant="outlined"
+                format="dd/MM/yyyy"
+                id="ngayhen"
+                label="Ngày hẹn"
+                name="ngayhen"
+                value={this.state.ngayhen}
+                onChange={this.handleChangeNgayHen}
+                KeyboardButtonProps={{
+                  "aria-label": "change date"
+                }}
+              />
+          </MuiPickersUtilsProvider>
               </Grid>
-              <Grid item xs={9}>
-                <DatePicker
-                  name="ngayBatDau"
-                  selected={this.state.ngayhen}
-                  onChange={this.handleChangeNgayHen}
-                  dateFormat="dd/MM/yyyy"
+              {
+
+                this.state.giaidoan == 13?(
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      label="Điểm"
+                      name="diem"
+                      onChange={this.handleChangeInputText}
+                      type="number"
+                      value={this.state.diem}
+                      variant="outlined"
+                    />
+                </Grid>) : (<div></div>)
                   
+              }
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Địa điểm hẹn"
+                  name="diadiemhen"
+                  onChange={this.handleChangeInputText}
+                  type="text"
+                  value={this.state.diadiemhen}
+                  variant="outlined"
                 />
               </Grid>
-
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Nhận xét"
+                  name="note"
+                  onChange={this.handleChangeInputText}
+                  type="text"
+                  value={this.state.note}
+                  variant="outlined"
+                />
+              </Grid>
               
-              <Grid item xs={3}>
-                <span>Địa điểm hẹn :</span>
-              </Grid>
-              <Grid item xs={9}>
-                <input style={{ width:"100%" }} type="text" name="diadiemhen" value = {this.state.diadiemhen} onChange = {this.handleChangeInputText}/>
-              </Grid>
-              <Grid item xs={3}>
-                <span>Nhận xét :</span>
-              </Grid>
-              <Grid item xs={9}>
-                <input style={{ width:"100%" }} type="text" name="note" value = {this.state.note} onChange = {this.handleChangeInputText}/>
-              </Grid>
-              <Grid item xs={3}>
-                <span>Điểm :</span>
-              </Grid>
-              <Grid item xs={9}>
-                <input style={{ width:"100%" }} type="number" name="diem" value = {this.state.diem} onChange = {this.handleChangeInputText}/>
-              </Grid>
             </Grid>
           </DialogContentText>
         </DialogContent>

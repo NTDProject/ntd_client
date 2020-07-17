@@ -5,7 +5,7 @@ import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { getData, save, getHistory, getDataGiaiDoan, tranfer } from './actions';
 import { Save } from '@material-ui/icons/';
-import { Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, Input, MenuItem } from "@material-ui/core/";
+import { TextField, Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Select, Input, MenuItem } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
@@ -126,13 +126,18 @@ class Manager extends Component {
             Thông tin nhóm quyền
       </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Tên nhóm quyền:</span>
-            </Grid>
             <Grid item xs={5}>
-              <input style = {{width:"100%"}} type="text" name="group_name" value = {this.state.group_name} onChange = {this.handleChangeInputText}/>
+              <TextField
+                fullWidth
+                label="Tên nhóm quyền"
+                name="group_name"
+                onChange={this.handleChangeInputText}
+                type="text"
+                value={this.state.group_name}
+                variant="outlined"
+              />
             </Grid>
-            <Grid item xs={5}></Grid>
+            <Grid item xs={7}></Grid>
           </Grid>
         </div>
 

@@ -31,15 +31,10 @@ const Topbar = props => {
     <AppBar
       {...rest}
       className={clsx(classes.root, className)}
+      style = {{backgroundColor: "#62BB47"}}
     >
       <Toolbar>
-        <RouterLink to="/">
-          <img
-            alt="Logo"
-            src="/images/logos/logo--white.svg"
-          />
-
-        </RouterLink>
+        <p style={{marginLeft:'10px', color:'white',fontWeight: 500, fontFamily: 'cursive'}}>NTD</p>
         <div className={classes.flexGrow} />
         <Hidden mdDown>
           <IconButton

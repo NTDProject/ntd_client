@@ -5,7 +5,7 @@ import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { getData, save, getHistory } from './actions';
 import { Save } from '@material-ui/icons/';
-import { Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText,DialogTitle } from "@material-ui/core/";
+import { TextField, Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText,DialogTitle } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
@@ -252,35 +252,54 @@ class Manager extends Component {
       </Typography>
           <Grid container spacing={3}>
             <Grid item xs={1}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Tên chiến dịch:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <input type="text" name="ten_chiendich" value = {this.state.ten_chiendich}/>
+            <Grid item xs={4}>
+                    <TextField
+                      fullWidth
+                      label="Tên chiến dịch"
+                      name="ten_chiendich"
+                      type="text"
+                      value={this.state.ten_chiendich}
+                      variant="outlined"
+                    />
             </Grid>
             <Grid item xs={2}></Grid>
            
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Tên ứng viên:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <input type="text" name="tenungvien" value = {this.state.tenungvien} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={4}>
+                    <TextField
+                      fullWidth
+                      label="Tên ứng viên"
+                      name="tenungvien"
+                      onChange={this.handleChangeInputText}
+                      type="text"
+                      value={this.state.tenungvien}
+                      variant="outlined"
+                    />
             </Grid>
             <Grid item xs={1}></Grid>
 
             <Grid item xs={1}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Email:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <input type="text" name="email" value = {this.state.email} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={4}>
+                    <TextField
+                      fullWidth
+                      label="Email"
+                      name="email"
+                      onChange={this.handleChangeInputText}
+                      type="text"
+                      value={this.state.email}
+                      variant="outlined"
+                    />
             </Grid>
             <Grid item xs={2}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Số điện thoại:</span>
-            </Grid>
-            <Grid item xs={2}>
-              <input type="text" name="sdt" value = {this.state.sdt} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={4}>
+                    <TextField
+                      fullWidth
+                      label="Số điện thoại"
+                      name="sdt"
+                      onChange={this.handleChangeInputText}
+                      type="number"
+                      value={this.state.sdt}
+                      variant="outlined"
+                    />  
             </Grid>
             <Grid item xs={1}></Grid>
           </Grid>

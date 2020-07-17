@@ -6,7 +6,7 @@ import "react-table-v6/react-table.css";
 import { getData, saveCampaign, checkSaveCampaign, getDataYC } from './actions';
 import { deleteData } from '../../UngVien/actions';
 import { Save } from '@material-ui/icons/';
-import { Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Input, MenuItem, Select  } from "@material-ui/core/";
+import { TextField, Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Input, MenuItem, Select  } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
@@ -17,6 +17,12 @@ import 'react-notifications/lib/notifications.css';
 import { Delete, Create, Details } from '@material-ui/icons/';
 import "react-datepicker/dist/react-datepicker.css";
 import ReactExport from "react-export-excel";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from "@material-ui/pickers";
+
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
@@ -63,7 +69,6 @@ class Manager extends Component {
     let ListVitri = [...(this.state.ListViTri)]
     let value = e.target.value
     let listYeuCauChose = ListVitri.filter(vt => vt.vitri_id == value)
-    console.log(listYeuCauChose)
     this.setState({
       vitri_id : value,
       ListYeuCauChose:   listYeuCauChose[0].yeucau.filter(yc => yc.checkYC > 0)
@@ -118,7 +123,6 @@ class Manager extends Component {
       ListUV: resp.ListUV,
       listDownload:resp.ListUV
     })
-    console.log(resp)
   }
 
   handleChangeNgayBatDau = date => {
@@ -231,12 +235,11 @@ class Manager extends Component {
     }
     else{
       const{ngayBatDau, ngayKetThuc, tenChienDich, ListViTri, idChienDich} = this.state
-      console.log(document.getElementById("ngay_batdau").value)
       let value = {
         chiendich_id: idChienDich,
         ten_chiendich: tenChienDich,
-        ngay_batdau: document.getElementById("ngay_batdau").value,
-        ngay_ketthuc: document.getElementById("ngay_ketthuc").value,
+        ngay_batdau: ((ngayBatDau.getDate()).toString().padStart(2, '0'))+"/"+((ngayBatDau.getMonth()+1).toString().padStart(2, '0'))+"/"+ngayBatDau.getFullYear(),
+        ngay_ketthuc: ((ngayKetThuc.getDate()).toString().padStart(2, '0'))+"/"+((ngayKetThuc.getMonth()+1).toString().padStart(2, '0'))+"/"+ngayKetThuc.getFullYear(),
         trangthai:"",
         mota:"",
         ListViTri: ListViTri
@@ -252,7 +255,6 @@ class Manager extends Component {
   }
 
     delete =   (value) => {
-    console.log("aa", value._original)
     this.props.deleteData(value._original, this.afterDelete)
   }
 
@@ -272,8 +274,8 @@ class Manager extends Component {
     let value = {
       chiendich_id: idChienDich,
       ten_chiendich: tenChienDich,
-      ngay_batdau: document.getElementById("ngay_batdau").value,
-        ngay_ketthuc: document.getElementById("ngay_ketthuc").value,
+      ngay_batdau: ((ngayBatDau.getDate()).toString().padStart(2, '0'))+"/"+((ngayBatDau.getMonth()+1).toString().padStart(2, '0'))+"/"+ngayBatDau.getFullYear(),
+      ngay_ketthuc: ((ngayKetThuc.getDate()).toString().padStart(2, '0'))+"/"+((ngayKetThuc.getMonth()+1).toString().padStart(2, '0'))+"/"+ngayKetThuc.getFullYear(),
       trangthai:"",
       mota:"",
       ListViTri: ListViTri
@@ -368,40 +370,61 @@ class Manager extends Component {
             Thông tin chung:
       </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Tên chiến dịch:</span>
-            </Grid>
-            <Grid item xs={3}>
-              <input type="text" name="tenChienDich" value = {this.state.tenChienDich} onChange = {this.handleChangeInputText}/>
+            <Grid item xs={5}>
+            <TextField
+                      fullWidth
+                      label="Tên chiến dịch:"
+                      name="tenChienDich"
+                      onChange={this.handleChangeInputText}
+                      type="text"
+                      value={this.state.tenChienDich}
+                      variant="outlined"
+                    />
             </Grid>
             <Grid item xs={7}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Ngày bắt đầu:</span>
-            </Grid>
-            <Grid item xs={3}>
-              <DatePicker
-              id = "ngay_batdau"
+            <Grid item xs={5}>
+              
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                fullWidth
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="ngayBatDau"
+                label="Ngày bắt đầu"
                 name="ngayBatDau"
-                selected={this.state.ngayBatDau}
+                value={this.state.ngayBatDau}
                 onChange={this.handleChangeNgayBatDau}
-                dateFormat="dd/MM/yyyy"
+                KeyboardButtonProps={{
+                  "aria-label": "change date"
+                }}
               />
+          </MuiPickersUtilsProvider>
             </Grid>
 
             <Grid item xs={1}></Grid>
-            <Grid item xs={2}>
-              <span style={{ marginRight: "50px" }}>Ngày kết thúc:</span>
-            </Grid>
-            <Grid item xs={4}>
-              <DatePicker
-                id = "ngay_ketthuc"
+            <Grid item xs={5}>
+              
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                fullWidth
+                disableToolbar
+                variant="inline"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="ngay_ketthuc"
+                label="Ngày kết thúc"
                 name="ngayKetThuc"
-                selected={this.state.ngayKetThuc}
+                value={this.state.ngayKetThuc}
                 onChange={this.handleChangeNgayKetThuc}
-                dateFormat="dd/MM/yyyy"
+                KeyboardButtonProps={{
+                  "aria-label": "change date"
+                }}
               />
+          </MuiPickersUtilsProvider>
             </Grid>
-            <Grid item xs={2}></Grid>
+            <Grid item xs={1}></Grid>
 
           </Grid>
         </div>

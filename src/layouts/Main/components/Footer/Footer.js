@@ -16,25 +16,9 @@ const Footer = props => {
   const classes = useStyles();
 
   return (
-    <div
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      <Typography variant="body1">
-        &copy;{' '}
-        <Link
-          component="a"
-          href="#"
-          target="_blank"
-        >
-          
-        </Link>
-        Sản phẩm thuộc về Nguyệt - Đồ án tốt nghiệp 2020
-      </Typography>
-      <Typography variant="caption">
-        
-      </Typography>
-    </div>
+    <div className="footer">
+    <p>© 2020 Copyright NTD</p>
+  </div>
   );
 };
 

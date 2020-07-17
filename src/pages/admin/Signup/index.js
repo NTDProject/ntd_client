@@ -75,43 +75,47 @@ class Manager extends Component {
       </Typography>
           <Grid container spacing={3}>
               
-                    <Grid item xs={2}>
-                        <span>Username :</span>
+                    <Grid item xs={5}>
+                        <TextField
+                          fullWidth
+                          label="Username"
+                          name="name"
+                          onChange={this.handleChangeInputText}
+                          type="text"
+                          value={this.state.name}
+                          variant="outlined"
+                        />
                     </Grid>
-                    <Grid item xs={4}>
-                        <input style={{ width:"100%" }} type="text" name="name" value = {this.state.name} onChange = {this.handleChangeInputText}/>
+                    <Grid item xs={7}></Grid>
+                    <Grid item xs={5}>
+                        <TextField
+                          fullWidth
+                          label="Email"
+                          name="email"
+                          onChange={this.handleChangeInputText}
+                          type="text"
+                          value={this.state.email}
+                          variant="outlined"
+                        />
                     </Grid>
-                    <Grid item xs={6}></Grid>
-                    {/* <Grid item xs={2}>
-                        <span>Số điện thoại :</span>
+                    <Grid item xs={7}></Grid>
+                    <Grid item xs={5}>
+                    <TextField
+                    fullWidth
+                    id="group_id"
+                    name="group_id"
+                    select
+                    label="Nhóm quyền"
+                    value={this.state.group_id}
+                    onChange={this.handleChangeSelect}
+                    variant="outlined"
+                  >
+                    {
+                      ListGroup
+                    }
+                  </TextField>
                     </Grid>
-                    <Grid item xs={4}>
-                        <input style={{ width:"100%" }} type="text" name="phone" value = {this.state.phone} onChange = {this.handleChangeInputText}/>
-                    </Grid>
-                    <Grid item xs={6}></Grid> */}
-                    <Grid item xs={2}>
-                        <span>Email :</span>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <input style={{ width:"100%" }} type="text" name="email" value = {this.state.email} onChange = {this.handleChangeInputText}/>
-                    </Grid>
-                    <Grid item xs={6}></Grid>
-                    <Grid item xs={2}>
-                        <span>Email :</span>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Select
-                        style = {{width: "100%"}}
-                        input={<Input />}
-                        input={<Input style={{ width:"100%" }}/>}
-                        onChange={this.handleChangeSelect}
-                      >
-                        {
-                              ListGroup
-                        }
-                      </Select>
-                    </Grid>
-                    <Grid item xs={6}></Grid>
+                    <Grid item xs={7}></Grid>
                     </Grid>
 
                     <div style ={{textAlign: "center", margin: "20px"}}>

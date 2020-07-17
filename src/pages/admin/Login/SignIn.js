@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundImage: 'url(/images/auth.jpg)',
+    backgroundImage: 'url(/images/tuyen_dung.jpg)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center'
@@ -210,20 +210,20 @@ const SignIn = props => {
                 className={classes.quoteText}
                 variant="h1"
               >
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr
+                
               </Typography>
               <div className={classes.person}>
                 <Typography
                   className={classes.name}
                   variant="body1"
                 >
-                  QWERTY
+                  
                 </Typography>
                 <Typography
                   className={classes.bio}
                   variant="body2"
                 >
-                  Manager at inVision
+                  
                 </Typography>
               </div>
             </div>
@@ -287,18 +287,6 @@ const SignIn = props => {
                 >
                   Đăng nhập
                 </Button>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Bạn chưa có tài khoản ?{' '}
-                  <Link
-                    to="/signup"
-                    variant="h6"
-                  >
-                    Đăng ký ngay
-                  </Link>
-                </Typography>
               </form>
             </div>
           </div>
