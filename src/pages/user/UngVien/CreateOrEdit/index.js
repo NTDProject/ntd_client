@@ -40,14 +40,21 @@ class Manager extends Component {
       open: false,
       ListGiaiDoan:[],
       giaidoansau:"",
-      diadiemhen:"",
       ngayhen:new Date(),
       giaidoansau_id:"",
       note:"",
       diem:"",
+      diadiemhen:"",
       ListYeuCau:[],
       viTriMax:{},
-      open2: false
+      open2: false,
+      quequan:"",
+      noiohientai:"",
+      truong:"",
+      trinhdo:"",
+      ngaysinh:new Date(),
+      gioitinh:"",
+      sdt:""
     }
   }
   componentDidMount() {
@@ -58,6 +65,14 @@ class Manager extends Component {
     else{
       let tenungvien = this.props.route.location.state.tenungvien
       let email = this.props.route.location.state.email
+      let sdt = this.props.route.location.state.sdt
+      let gioitinh = this.props.route.location.state.gioitinh
+      let arrngaysinh = (this.props.route.location.state.ngaysinh).split("-")
+      console.log(arrngaysinh)
+      let trinhdo = this.props.route.location.state.trinhdo
+      let truong = this.props.route.location.state.truong
+      let noiohientai = this.props.route.location.state.noiohientai
+      let quequan = this.props.route.location.state.quequan
       let ten_chiendich = this.props.route.location.state.ten_chiendich
       let ten_vitri = this.props.route.location.state.ten_vitri
       let ten_giaidoan = this.props.route.location.state.ten_giaidoan
@@ -70,6 +85,13 @@ class Manager extends Component {
       this.setState({
         tenungvien :tenungvien,
         email:email,
+        quequan:quequan,
+        noiohientai:noiohientai,
+        truong:truong,
+        trinhdo:trinhdo,
+        ngaysinh:new Date(arrngaysinh[0],arrngaysinh[1]-1,arrngaysinh[2]),
+        gioitinh:gioitinh,
+        sdt:sdt,
         ten_chiendich:ten_chiendich,
         ten_vitri:ten_vitri,
         ten_giaidoan:ten_giaidoan,
@@ -84,7 +106,11 @@ class Manager extends Component {
   }
 
 
- 
+  handleChangeNgaySinh = date => {
+    this.setState({
+      ngaysinh: date
+    });
+  };
 
   afterGetDataGiaiDoan = (resp) => {
     this.setState({
@@ -108,7 +134,7 @@ class Manager extends Component {
   
 
   save = () => {
-    const {ungvien_id, tenungvien, email, ListYeuCau, vitri_id, chiendich_id} = this.state
+    const {ungvien_id, sdt, gioitinh, tenungvien, ngaysinh, email, ListYeuCau, trinhdo, vitri_id, chiendich_id, noiohientai, quequan, truong} = this.state
 
     if(tenungvien == null || tenungvien == undefined || tenungvien == ''){
       NotificationManager.error('Error', "Không được để trống Tên ứng viên", 3000);
@@ -124,6 +150,13 @@ class Manager extends Component {
         chiendich_id:chiendich_id,
         ten_ungvien:tenungvien,
         email:email,
+        quequan:quequan,
+        noiohientai:noiohientai,
+        truong:truong,
+        trinhdo:trinhdo,
+        ngaysinh:((ngaysinh.getDate()).toString().padStart(2, '0'))+"/"+((ngaysinh.getMonth()+1).toString().padStart(2, '0'))+"/"+ngaysinh.getFullYear(),
+        gioitinh:gioitinh,
+        sdt:sdt,
         yc: ListYeuCau
       }
       this.props.save(value,this.afterSave)
@@ -181,7 +214,12 @@ class Manager extends Component {
   }
   tranfer = () => {
     this.setState({
-      open: true
+      open: true,
+      ngayhen:new Date(),
+      giaidoansau_id:"",
+      note:"",
+      diem:"",
+      diadiemhen:"",
     })
   }
 
@@ -215,7 +253,7 @@ class Manager extends Component {
         ten_giaidoan: ten_giaidoan,
         giaidoan: giaidoan,
         giaidoansau_id:giaidoansau_id,
-        ngayhen:ngayhen,
+        ngayhen:((ngayhen.getDate()).toString().padStart(2, '0'))+"/"+((ngayhen.getMonth()+1).toString().padStart(2, '0'))+"/"+ngayhen.getFullYear(),
         diadiemhen:diadiemhen,
         ungvien_id:ungvien_id,
         email: email,
@@ -280,8 +318,8 @@ class Manager extends Component {
             Thông tin chung:
       </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={8}>
+          <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
               <TextField
                 fullWidth
                 label="Tên chiến dịch"
@@ -291,10 +329,8 @@ class Manager extends Component {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={3}></Grid>
-           
-            <Grid item xs={1}></Grid>
-            <Grid item xs={8}>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={4}>
               <TextField
                 fullWidth
                 label="Tên ứng viên"
@@ -305,9 +341,9 @@ class Manager extends Component {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={3}></Grid>
             <Grid item xs={1}></Grid>
-            <Grid item xs={8}>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
               <TextField
                 fullWidth
                 label="Email"
@@ -318,9 +354,116 @@ class Manager extends Component {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={3}></Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={4}>
+            <TextField
+                      fullWidth
+                      label="Số điện thoại"
+                      name="sdt"
+                      onChange={this.handleChangeInputText}
+                      type="number"
+                      value={this.state.sdt}
+                      variant="outlined"
+                    />  
+            </Grid>
             <Grid item xs={1}></Grid>
-            <Grid item xs={8}>
+
+            <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                fullWidth
+                disableToolbar
+                variant="inline"
+                inputVariant="outlined"
+                format="dd/MM/yyyy"
+                id="ngaysinh"
+                label="Ngày sinh"
+                name="ngaysinh"
+                value={this.state.ngaysinh}
+                onChange={this.handleChangeNgaySinh}
+                KeyboardButtonProps={{
+                  "aria-label": "change date"
+                }}
+              />
+          </MuiPickersUtilsProvider>
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={4}>
+            <TextField
+                fullWidth
+                id="gioitinh"
+                name="gioitinh"
+                select
+                label="Giới tính"
+                value={this.state.gioitinh}
+                onChange={this.handleChangeInputText}
+                variant="outlined"
+              >
+                <MenuItem value="1" key = "1">Nam</MenuItem>
+                <MenuItem value="0" key = "0">Nữ</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={1}></Grid>
+
+            <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
+            <TextField
+                      fullWidth
+                      label="Trường"
+                      name="truong"
+                      onChange={this.handleChangeInputText}
+                      type="text"
+                      value={this.state.truong}
+                      variant="outlined"
+                    />
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={4}>
+            <TextField
+                fullWidth
+                id="trinhdo"
+                name="trinhdo"
+                select
+                label="Trình độ"
+                value={this.state.trinhdo}
+                onChange={this.handleChangeInputText}
+                variant="outlined"
+              >
+                <MenuItem value="1" key = "1">Đại học</MenuItem>
+                <MenuItem value="2" key = "2">Cao đẳng</MenuItem>
+                <MenuItem value="3" key = "3">Trung cấp</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={1}></Grid>
+
+            <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
+            <TextField
+                      fullWidth
+                      label="Quê quán"
+                      name="quequan"
+                      onChange={this.handleChangeInputText}
+                      type="text"
+                      value={this.state.quequan}
+                      variant="outlined"
+                    />
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={4}>
+            <TextField
+                      fullWidth
+                      label="Nơi ở hiện tại"
+                      name="noiohientai"
+                      onChange={this.handleChangeInputText}
+                      type="text"
+                      value={this.state.noiohientai}
+                      variant="outlined"
+                    />
+            </Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
               <TextField
                 fullWidth
                 label="Vị trí"
@@ -331,7 +474,7 @@ class Manager extends Component {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={3}></Grid>
+            <Grid item xs={7}></Grid>
           </Grid>
         </div>
 
@@ -352,7 +495,7 @@ class Manager extends Component {
               width: 150
             },
             {
-              Header: "Nội dung yêu cầu",
+              Header: "Tiêu chí đánh giá",
               accessor: "nd_yeucau",
               width: 500
             },
@@ -452,7 +595,7 @@ class Manager extends Component {
                     {
                       ListGiaiDoan
                     }
-                  </TextField>
+                </TextField>
               </Grid>
           
               

@@ -178,6 +178,11 @@ class Manager extends Component {
               filterable: true,
             },
             {
+              Header: "Trình độ",
+              accessor: "trinhdoStr",
+              filterable: true,
+            },
+            {
               Header: "Chiến dịch",
               accessor: "ten_chiendich",
               filterable: true,

@@ -5,7 +5,7 @@ import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
 import { getData, save, getHistory } from './actions';
 import { Save } from '@material-ui/icons/';
-import { TextField, Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText,DialogTitle } from "@material-ui/core/";
+import { MenuItem, TextField, Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText,DialogTitle } from "@material-ui/core/";
 import DatePicker from "react-datepicker";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,7 +13,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import { withRouter } from 'react-router-dom';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from "@material-ui/pickers";
 
+
+import "react-datepicker/dist/react-datepicker.css";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -33,7 +40,13 @@ class Manager extends Component {
       open: false,
       open2: false,
       ListYeuCau: [],
-      viTriMax:[]
+      viTriMax:[],
+      quequan:"",
+      noiohientai:"",
+      truong:"",
+      trinhdo:"",
+      ngaysinh:new Date(),
+      gioitinh:""
     }
   }
   componentDidMount() {
@@ -56,6 +69,11 @@ class Manager extends Component {
     }
   }
 
+  handleChangeNgaySinh = date => {
+    this.setState({
+      ngaysinh: date
+    });
+  };
 
   after = (resp) => {
 
@@ -162,14 +180,20 @@ class Manager extends Component {
       NotificationManager.error('Error',"Bạn phải chọn ít nhất 1 vị trí ứng tuyển", 3000);
     }
     else{
-      const {tenungvien,email,ListViTri,chiendich_id,ungvien_id,sdt} = this.state 
+      const {tenungvien,email,ListViTri,chiendich_id,ungvien_id,sdt,gioitinh,ngaysinh,trinhdo,truong,noiohientai,quequan} = this.state 
       let value = {
         chiendich_id:chiendich_id,
         ungvien_id:ungvien_id,
         ten_ungvien:tenungvien,
         email:email,
         sdt:sdt,
-        ListViTri:ListViTri
+        ListViTri:ListViTri,
+        quequan:quequan,
+        noiohientai:noiohientai,
+        truong:truong,
+        trinhdo:trinhdo,
+        ngaysinh:ngaysinh,
+        gioitinh:gioitinh
       }
       this.props.save(value,this.afterSave)
     }
@@ -302,6 +326,101 @@ class Manager extends Component {
                     />  
             </Grid>
             <Grid item xs={1}></Grid>
+
+            <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                fullWidth
+                disableToolbar
+                variant="inline"
+                inputVariant="outlined"
+                format="dd/MM/yyyy"
+                id="ngaysinh"
+                label="Ngày sinh"
+                name="ngaysinh"
+                value={this.state.ngaysinh}
+                onChange={this.handleChangeNgaySinh}
+                KeyboardButtonProps={{
+                  "aria-label": "change date"
+                }}
+              />
+          </MuiPickersUtilsProvider>
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                id="gioitinh"
+                name="gioitinh"
+                select
+                label="Giới tính"
+                value={this.state.gioitinh}
+                onChange={this.handleChangeInputText}
+                variant="outlined"
+              >
+                <MenuItem value="1" key = "1">Nam</MenuItem>
+                <MenuItem value="0" key = "0">Nữ</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={1}></Grid>
+
+            <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
+            <TextField
+                      fullWidth
+                      label="Trường"
+                      name="truong"
+                      onChange={this.handleChangeInputText}
+                      type="text"
+                      value={this.state.truong}
+                      variant="outlined"
+                    />
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                id="trinhdo"
+                name="trinhdo"
+                select
+                label="Trình độ"
+                value={this.state.trinhdo}
+                onChange={this.handleChangeInputText}
+                variant="outlined"
+              >
+                <MenuItem value="1" key = "1">Đại học</MenuItem>
+                <MenuItem value="2" key = "2">Cao đẳng</MenuItem>
+                <MenuItem value="3" key = "3">Trung cấp</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={1}></Grid>
+
+            <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
+                    <TextField
+                      fullWidth
+                      label="Quê quán"
+                      name="quequan"
+                      onChange={this.handleChangeInputText}
+                      type="text"
+                      value={this.state.quequan}
+                      variant="outlined"
+                    />
+            </Grid>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={4}>
+                    <TextField
+                      fullWidth
+                      label="Nơi ở hiện tại"
+                      name="noiohientai"
+                      onChange={this.handleChangeInputText}
+                      type="text"
+                      value={this.state.noiohientai}
+                      variant="outlined"
+                    />  
+            </Grid>
+            <Grid item xs={1}></Grid>
           </Grid>
         </div>
         <Divider />
@@ -332,10 +451,10 @@ class Manager extends Component {
 
             },
             {
-              Header: "Yêu cầu",
+              Header: "Tiêu chí",
               Cell: (props) => 
               <div style = {{textAlign: "center"}}>
-                <Button  variant="contained" color="secondary" onClick = {() => this.handleChangeInputOnCell2(props.row)}>Chỉnh sửa yêu cầu</Button>
+                <Button  variant="contained" color="secondary" onClick = {() => this.handleChangeInputOnCell2(props.row)}>Tiêu chí đánh giá</Button>
               </div>
 
             }
@@ -362,7 +481,7 @@ class Manager extends Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-        <DialogTitle id="alert-dialog-title">{"Thông tin yêu cầu"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Tiêu chí đánh giá"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
           <ReactTable

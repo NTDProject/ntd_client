@@ -450,7 +450,7 @@ class Manager extends Component {
               Header: "Yêu cầu",
               Cell: (props) => 
               <div style = {{textAlign: "center"}}>
-                <Button  variant="contained" color="secondary" onClick = {() => this.handleChangeInputOnCell2(props.row)}>Chỉnh sửa yêu cầu</Button>
+                <Button  variant="contained" color="secondary" onClick = {() => this.handleChangeInputOnCell2(props.row)}>Nội dung yêu cầu</Button>
               </div>
 
             },
