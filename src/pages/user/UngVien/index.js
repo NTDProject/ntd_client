@@ -26,7 +26,8 @@ class Manager extends Component {
       chienDichId: "",
       ListCampaign:[],
       ten_chiendich: "",
-      listDownload: []
+      listDownload: [],
+      trangThai: "Pause"
     }
   }
   componentDidMount() {
@@ -73,8 +74,12 @@ class Manager extends Component {
   themChienDich = () => {
     let chienDichId = this.state.chienDichId
     let ten_chiendich = this.state.ten_chiendich
+    let trangThai = this.state.trangThai
     if(chienDichId == "" || chienDichId == undefined || chienDichId== null){
       NotificationManager.error('Error', "Vui lòng chọn chiến dịch", 3000);
+    }
+    if(trangThai == "Pause"){
+      NotificationManager.error('Error', "Chiến dịch đã hết hạn, vui lòng chỉnh sửa ngày kết thúc của chiến dịch để tiếp tục thêm mới", 3000);
     }
     else{
       let path = `/UngVien/Create`;
@@ -85,8 +90,13 @@ class Manager extends Component {
   themUngVienCoSan = () => {
     let chienDichId = this.state.chienDichId
     let ten_chiendich = this.state.ten_chiendich
+    let trangThai = this.state.trangThai
+
     if(chienDichId == "" || chienDichId == undefined || chienDichId== null){
       NotificationManager.error('Error', "Vui lòng chọn chiến dịch", 3000);
+    }
+    if(trangThai == "Pause"){
+      NotificationManager.error('Error', "Chiến dịch đã hết hạn, vui lòng chỉnh sửa ngày kết thúc của chiến dịch để tiếp tục thêm mới", 3000);
     }
     else{
       let path = `/UngVien/add`;
@@ -105,7 +115,8 @@ class Manager extends Component {
     let ten_chiendich = ListCampaign.filter(Campaign => Campaign.chiendich_id == value)
     this.setState({
       chienDichId : value,
-      ten_chiendich:   ten_chiendich[0].ten_chiendich
+      ten_chiendich:   ten_chiendich[0].ten_chiendich,
+      trangThai: ten_chiendich[0].trangthai
     });
 
   };
@@ -167,6 +178,11 @@ class Manager extends Component {
 
           }
           columns={[
+            {
+              Header: "Ma ứng viên",
+              accessor: "ungvien_id",
+              filterable: true,
+            },
             {
               Header: "Tên ứng viên",
               accessor: "tenungvien",

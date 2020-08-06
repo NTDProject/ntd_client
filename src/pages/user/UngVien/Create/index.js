@@ -192,7 +192,7 @@ class Manager extends Component {
         noiohientai:noiohientai,
         truong:truong,
         trinhdo:trinhdo,
-        ngaysinh:ngaysinh,
+        ngaysinh:((ngaysinh.getDate()).toString().padStart(2, '0'))+"/"+((ngaysinh.getMonth()+1).toString().padStart(2, '0'))+"/"+ngaysinh.getFullYear(),
         gioitinh:gioitinh
       }
       this.props.save(value,this.afterSave)

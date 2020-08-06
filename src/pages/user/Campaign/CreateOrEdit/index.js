@@ -527,6 +527,11 @@ class Manager extends Component {
           }
           columns={[
             {
+              Header: "Ma ứng viên",
+              accessor: "ungvien_id",
+              filterable: true,
+            },
+            {
               Header: "Tên ứng viên",
               accessor: "tenungvien",
               filterable: true,

@@ -54,7 +54,7 @@ class Manager extends Component {
       trinhdo:"",
       ngaysinh:new Date(),
       gioitinh:"",
-      sdt:""
+      sdt:"",
     }
   }
   componentDidMount() {
@@ -68,7 +68,6 @@ class Manager extends Component {
       let sdt = this.props.route.location.state.sdt
       let gioitinh = this.props.route.location.state.gioitinh
       let arrngaysinh = (this.props.route.location.state.ngaysinh).split("-")
-      console.log(arrngaysinh)
       let trinhdo = this.props.route.location.state.trinhdo
       let truong = this.props.route.location.state.truong
       let noiohientai = this.props.route.location.state.noiohientai
@@ -318,6 +317,31 @@ class Manager extends Component {
             Thông tin chung:
       </Typography>
           <Grid container spacing={3}>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                label="Mã ứng viên"
+                name="ungvien_id"
+                type="text"
+                value={this.state.ungvien_id}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={1}></Grid>
+            <Grid item xs={4}>
+              <TextField
+                fullWidth
+                label="Vị trí"
+                name="ten_vitri"
+                onChange={this.handleChangeInputText}
+                type="text"
+                value={this.state.ten_vitri}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={1}></Grid>
           <Grid item xs={1}></Grid>
             <Grid item xs={4}>
               <TextField
@@ -462,19 +486,7 @@ class Manager extends Component {
                     />
             </Grid>
             <Grid item xs={1}></Grid>
-            <Grid item xs={1}></Grid>
-            <Grid item xs={4}>
-              <TextField
-                fullWidth
-                label="Vị trí"
-                name="ten_vitri"
-                onChange={this.handleChangeInputText}
-                type="text"
-                value={this.state.ten_vitri}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={7}></Grid>
+            
           </Grid>
         </div>
 
