@@ -252,7 +252,7 @@ class Manager extends Component {
         ten_giaidoan: ten_giaidoan,
         giaidoan: giaidoan,
         giaidoansau_id:giaidoansau_id,
-        ngayhen:((ngayhen.getDate()).toString().padStart(2, '0'))+"/"+((ngayhen.getMonth()+1).toString().padStart(2, '0'))+"/"+ngayhen.getFullYear(),
+        ngayhen:ngayhen?((ngayhen.getDate()).toString().padStart(2, '0'))+"/"+((ngayhen.getMonth()+1).toString().padStart(2, '0'))+"/"+ngayhen.getFullYear():"",
         diadiemhen:diadiemhen,
         ungvien_id:ungvien_id,
         email: email,
@@ -535,8 +535,13 @@ class Manager extends Component {
               width:"200"
             },
             {
-              Header: "Thời gian",
+              Header: "Ngày chuyển giai đoạn",
               accessor: "createdate",
+              width:"200"
+            },
+            {
+              Header: "Ngày hẹn",
+              accessor: "AppointmentDate",
               width:"200"
             },
             {

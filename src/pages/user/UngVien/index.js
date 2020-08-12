@@ -156,8 +156,14 @@ class Manager extends Component {
 
           <ExcelFile element={<Button variant="contained" color="secondary">Download</Button>}>
                 <ExcelSheet data={this.state.listDownload} name={"Ứng viên - " + this.state.ten_chiendich}>
+                    <ExcelColumn label="Mã ứng viên" value="ungvien_id"/>
                     <ExcelColumn label="Tên ứng viên" value="tenungvien"/>
                     <ExcelColumn label="Email" value="email"/>
+                    <ExcelColumn label="Trình độ" value="trinhdoStr"/>
+                    <ExcelColumn label="Chiến dịch" value="ten_chiendich"/>
+                    <ExcelColumn label="Vị trí" value="ten_vitri"/>
+                    <ExcelColumn label="Giai đoạn" value="ten_giaidoan"/>
+                    <ExcelColumn label="Trạng thái" value="trangthai"/>
                 </ExcelSheet>
             </ExcelFile>
         </div>
