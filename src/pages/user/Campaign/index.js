@@ -123,11 +123,6 @@ class Manager extends Component {
               filterable: true,
             },
             {
-              Header: "Mô tả",
-              accessor: "mota",
-              filterable: true,
-            },
-            {
               Header: "Thao tác",
               accessor: "chiendich_id",
               Cell: (props) => 
