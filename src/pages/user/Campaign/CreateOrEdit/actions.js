@@ -8,6 +8,13 @@ export const getData = (value,after) => {
     }
 }
 
+export const getDataByViTri = (value,after) => {
+    return {
+        type : Types.GET_DATA_VT_DETAIL,
+        payload: {value,after}
+    }
+}
+
 export const getDataYC = (value,after) => {
     return {
         type : Types.GET_DATA_UV_YC,

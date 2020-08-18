@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import ReactTable from "react-table-v6";
 import "react-table-v6/react-table.css";
-import { getData, saveCampaign, checkSaveCampaign, getDataYC } from './actions';
+import { getData, saveCampaign, checkSaveCampaign, getDataYC, getDataByViTri } from './actions';
 import { deleteData } from '../../UngVien/actions';
 import { Save } from '@material-ui/icons/';
 import { TextField, Button, Grid, Typography, Divider, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Input, MenuItem, Select  } from "@material-ui/core/";
@@ -73,7 +73,7 @@ class Manager extends Component {
       vitri_id : value,
       ListYeuCauChose:   listYeuCauChose[0].yeucau.filter(yc => yc.checkYC > 0)
     });
-
+    this.props.getDataByViTri({chiendich_id: this.state.idChienDich, vitri_id: value}, this.afterSearch)
   };
 
   handleChangeInputText4 = e => {
@@ -652,6 +652,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     getData: (value, after) => { dispatch(getData(value, after)) },
     getDataYC: (value, after) => { dispatch(getDataYC(value, after)) },
+    getDataByViTri: (value, after) => { dispatch(getDataByViTri(value, after)) },
     save: (value, after) => { dispatch(saveCampaign(value, after)) },
     checksave: (value, after) => { dispatch(checkSaveCampaign(value, after)) },
     deleteData: (value, after) => { dispatch(deleteData(value, after)) },

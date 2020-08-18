@@ -8,6 +8,14 @@ function* wathCampaignDetailAction(){
     yield takeLatest (Types.SAVE_CAMPAIGN, saveSaga)
     yield takeLatest (Types.CHECK_SAVE_CAMPAIGN, checkSaveSaga)
     yield takeLatest (Types.GET_DATA_UV_YC, getDataYCSaga)
+    yield takeLatest (Types.GET_DATA_VT_DETAIL, getDataVTSaga)    
+}
+
+function*  getDataVTSaga({payload}){
+    var resp = yield call(callApiUnauthWithBody,"ungvien/getUngVienByViTriAndChienDich/"+payload.value.chiendich_id+"/"+payload.value.vitri_id,"GET",{});
+    console.log(resp)
+    yield call(payload.after,resp.data)
+
 }
 
 function*  getDataSaga({payload}){

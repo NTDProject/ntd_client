@@ -11,6 +11,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
+import 'react-notifications/lib/notifications.css';
+import ReactExport from "react-export-excel";
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
 
 
 class Manager extends Component {
@@ -20,7 +25,8 @@ class Manager extends Component {
       CostList: [],
       chienDichId: "",
       ListCampaign:[],
-      ten_chiendich: ""
+      ten_chiendich: "",
+      listDownload:[]
     }
   }
   componentDidMount() {
@@ -34,6 +40,7 @@ class Manager extends Component {
     console.log("a",resp)
     this.setState({
       CostList: resp,
+      listDownload: resp
     })
 
   }
@@ -98,6 +105,12 @@ class Manager extends Component {
 
     this.props.getData(e.target.value, this.after);
   };
+  handleFilterChange = () => {
+    const listDownload = this.selectTable.getResolvedState().sortedData;
+    this.setState({
+      listDownload:listDownload
+    })
+  }
 
   render() {
     const ListCampaign = this.state.ListCampaign.map(c => {
@@ -125,14 +138,23 @@ class Manager extends Component {
             }
           </Select>{' '}
           <Button variant="contained" color="secondary" onClick={this.themChienDich}>Thêm chi phí mới</Button>{' '}
-
+          <ExcelFile element={<Button variant="contained" color="secondary">Download</Button>}>
+                <ExcelSheet data={this.state.listDownload} name={"ChiPhi_" + this.state.ten_chiendich}>
+                    <ExcelColumn label="Nội dung chi phí" value="noidung"/>
+                    <ExcelColumn label="Số tiền" value="sotien"/>
+                    <ExcelColumn label="ngày phát sinh" value="createdate"/>
+                    <ExcelColumn label="Ghi chú" value="note"/>
+                </ExcelSheet>
+            </ExcelFile>
         </div>
 
-
+        
         
         <ReactTable
+          ref={(r) => {this.selectTable = r;}}
           style={{ width: "98%", margin: "10px" }}
           showPagination={true}
+          onFilteredChange={this.handleFilterChange}
           sortable={false}
           data={this.state.CostList}
           pageSizeDefault={10}
